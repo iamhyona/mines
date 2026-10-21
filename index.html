@@ -67,8 +67,14 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .g i svg{width:72%;height:72%;pointer-events:none}
 .n1{color:var(--n1)}.n2{color:var(--n2)}.n3{color:var(--n3)}.n4{color:var(--n4)}.n5{color:var(--n5)}.n6{color:var(--n6)}.n7{color:var(--n7)}.n8{color:var(--n8)}
 .ft{display:flex;gap:8px;margin-top:12px;max-width:100%}
-.fb{flex:1;height:48px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--ink)}
+.fb{flex:1;min-width:0;height:48px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;white-space:nowrap;letter-spacing:-.3px;font-weight:800;color:var(--ink)}
 .fb svg{width:26px;height:26px}
+.fb:disabled{opacity:.4;pointer-events:none}
+.wellg{position:relative}
+.wellg.paused .g{visibility:hidden}
+.pz{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:20px;font-weight:800;color:var(--ink)}
+.pz small{font-size:12px;font-weight:600;color:var(--sub)}
+.wellg.paused .pz{display:flex}
 .fb.on{color:#ff8a95;background:#3a2a30;border-color:var(--tileB) #4a4e58 #4a4e58 var(--tileB);box-shadow:inset 0 0 0 1.5px rgba(255,77,94,.6)}
 .credit{margin-top:12px;font-size:11px;color:rgba(255,255,255,.35);text-align:center;line-height:1.5}
 .toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-20px);opacity:0;background:#2e3038;color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700;transition:.25s;pointer-events:none;z-index:60;box-shadow:0 8px 20px rgba(0,0,0,.4)}
@@ -108,12 +114,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
   <div class="tb"><span class="ttl"><svg width="18" height="18" viewBox="0 0 16 16"><use href="#i-mine"/></svg>지뢰찾기</span><button class="x" id="xBtn" aria-label="새 게임"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1L9 9M9 1L1 9" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button></div>
   <div class="menu">
     <button id="mGame">게임</button><button id="mHelp">도움말</button>
-    <button class="lv" id="lvLbl">초급 · 9×9</button>
+    <button class="lv" id="lvLbl">중급 · 16×20</button>
     <div class="drop" id="drop">
       <button data-n="1">새 게임<small>F2</small></button><hr>
-      <button data-lv="0">초급<small>9×9 · 10</small></button>
-      <button data-lv="1">중급<small>16×16 · 40</small></button>
-      <button data-lv="2">고급<small>30×16 · 99</small></button><hr>
+      <button data-lv="0">초급<small>10×10 · 12</small></button>
+      <button data-lv="1">중급<small>16×20 · 50</small></button>
+      <button data-lv="2">고급<small>30×20 · 120</small></button>
+      <button data-lv="3">마스터<small>30×30 · 200</small></button><hr>
       <button data-r="1">랭킹 보기</button>
     </div>
   </div>
@@ -122,10 +129,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
     <button class="smile raised" id="face" aria-label="새 게임"></button>
     <div class="led"><s>888</s><b id="timeLed">000</b></div>
   </div>
-  <div class="wellg" id="well"><div class="g" id="g"></div></div>
+  <div class="wellg" id="well"><div class="g" id="g"></div><button class="pz" id="pz">일시정지<small>눌러서 계속하기</small></button></div>
 </div>
 <div class="ft" id="ft">
   <button class="fb raised" id="flagBtn">깃발 모드</button>
+  <button class="fb raised" id="pauseBtn">일시정지</button>
   <button class="fb raised" id="rankBtn">랭킹</button>
 </div>
 <div class="credit">이 게임은 서울 마포구에 사는 박현아가 만든 비상업용 게임이에요.<br>지치고 힘들 때 잠시 머리 식히며 마음껏 즐겨 주세요.</div>
@@ -139,7 +147,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 </div></div></div>
 
 <div class="ov" id="rankOv"><div class="md"><div class="tb"><span class="ttl"><svg width="16" height="16" viewBox="0 0 16 16"><use href="#i-trophy"/></svg>최단 시간 랭킹</span></div><div class="bd">
-  <div class="tabs" id="tabs"><button data-t="0">초급</button><button data-t="1">중급</button><button data-t="2">고급</button></div>
+  <div class="tabs" id="tabs"><button data-t="0">초급</button><button data-t="1">중급</button><button data-t="2">고급</button><button data-t="3">마스터</button></div>
   <div class="list" id="list"></div>
   <button class="close" data-close>✕</button>
 </div></div></div>
@@ -165,7 +173,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 </svg>
 
 <script>
-const LV=[{n:'초급',w:9,h:9,m:10},{n:'중급',w:16,h:16,m:40},{n:'고급',w:30,h:16,m:99}];
+const LV=[{n:'초급',w:10,h:10,m:12},{n:'중급',w:16,h:20,m:50},{n:'고급',w:30,h:20,m:120},{n:'마스터',w:30,h:30,m:200}];
 const RANK_URL='https://script.google.com/macros/s/AKfycbzkdjVleobj98oyxlC77cUf5txCRiSB6D1zgRWU56pX22ElXAx9R8xFRGnV0nKAUbwC/exec';
 const $=id=>document.getElementById(id);
 const FACES={
@@ -176,7 +184,7 @@ const FACES={
 };
 function setFace(k){$('face').innerHTML=`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFD43B" stroke="#1d1d1f" stroke-width="1.6"/>${FACES[k]}</svg>`}
 
-let lv=+(localStorage.getItem('mines-lv')||0)||0, W,H,M, rot=false;
+let lv=(()=>{const v=localStorage.getItem('mines-lv');return v===null||!LV[+v]?1:+v})(), W,H,M, rot=false;
 let mine,state,cnt,cells,started,over,t0,timer,flags,opened,flagMode=false,lastWin=null;
 
 function isPortraitNarrow(){return innerWidth<innerHeight && innerWidth<700}
@@ -184,7 +192,7 @@ function newGame(){
   const L=LV[lv]; rot = L.w>L.h && isPortraitNarrow();
   W=rot?L.h:L.w; H=rot?L.w:L.h; M=L.m;
   mine=new Uint8Array(W*H); state=new Uint8Array(W*H); cnt=new Uint8Array(W*H);
-  started=false; over=false; flags=0; opened=0; clearInterval(timer); t0=0;
+  started=false; over=false; flags=0; opened=0; clearInterval(timer); t0=0; setPause(false,true);
   $('lvLbl').textContent=`${L.n} · ${L.w}×${L.h}`;
   [...document.querySelectorAll('.drop [data-lv]')].forEach(b=>b.classList.toggle('cur',+b.dataset.lv===lv));
   setLed('mineLed',M); setLed('timeLed',0); setFace('smile');
@@ -202,19 +210,32 @@ function fit(){
   const availH=innerHeight-260;
   const cH=Math.floor((availH-(H-1)*gap)/H);
   if(cH>=20) c=Math.min(c,cH);
-  c=Math.max(20,Math.min(c,42));
+  c=Math.max(17,Math.min(c,42));
   const g=$('g'); g.style.setProperty('--c',c+'px'); g.style.setProperty('--b',(c>=30?3:2)+'px'); g.style.setProperty('--gap',gap+'px');
-  $('win').style.width=$('ft').style.width=(W*c+(W-1)*gap+12+12)+'px';
+  $('win').style.width=$('ft').style.width=Math.min(W*c+(W-1)*gap+12+12,innerWidth-20)+'px';
 }
 function setLed(id,v){v=Math.max(-99,Math.min(999,v|0));$(id).textContent=v<0?'-'+String(-v).padStart(2,'0'):String(v).padStart(3,'0')}
 const nb=i=>{const x=i%W,y=(i/W)|0,r=[];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const X=x+dx,Y=y+dy;if(X>=0&&X<W&&Y>=0&&Y<H)r.push(Y*W+X)}return r};
+function runTimer(){clearInterval(timer);timer=setInterval(()=>setLed('timeLed',Math.floor((performance.now()-t0)/1000)+1),250)}
+let paused=false,pausedAt=0;
+function setPause(on,silent){
+  if(on&&(!started||over||paused)) { if(on&&!silent&&!started) toast('게임을 시작하면 쓸 수 있어요'); return; }
+  if(!on&&!paused) { $('pauseBtn').textContent='일시정지'; return; }
+  paused=on;
+  if(on){pausedAt=performance.now();clearInterval(timer);}
+  else if(!silent){t0+=performance.now()-pausedAt;runTimer();}
+  $('well').classList.toggle('paused',on);
+  $('pauseBtn').textContent=on?'계속하기':'일시정지';
+  $('pauseBtn').classList.toggle('on',on);
+  $('flagBtn').disabled=on;
+}
 function plant(safe){
   const ban=new Set([safe,...nb(safe)]); const pool=[];
   for(let i=0;i<W*H;i++) if(!ban.has(i)) pool.push(i);
   for(let k=0;k<M;k++){const j=k+Math.floor(Math.random()*(pool.length-k));[pool[k],pool[j]]=[pool[j],pool[k]];mine[pool[k]]=1}
   for(let i=0;i<W*H;i++) cnt[i]=nb(i).reduce((s,j)=>s+mine[j],0);
   started=true; t0=performance.now();
-  timer=setInterval(()=>setLed('timeLed',Math.floor((performance.now()-t0)/1000)+1),250); setLed('timeLed',1);
+  runTimer(); setLed('timeLed',1);
 }
 function draw(i){
   const c=cells[i], s=state[i];
@@ -279,7 +300,7 @@ function beep(k){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)
 const g=$('g'); let pt=null;
 g.addEventListener('contextmenu',e=>e.preventDefault());
 g.addEventListener('pointerdown',e=>{
-  const c=e.target.closest('i'); if(!c||over) return;
+  const c=e.target.closest('i'); if(!c||over||paused) return;
   const i=+c.dataset.i;
   if(e.pointerType==='mouse'){
     if(e.button===2){flag(i);return}
@@ -310,7 +331,10 @@ document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.o
 document.querySelectorAll('.ov').forEach(o=>o.addEventListener('pointerdown',e=>{if(e.target===o&&o.id!=='winOv')o.classList.remove('show')}));
 $('face').onclick=newGame; $('xBtn').onclick=newGame;
 $('flagBtn').onclick=()=>{flagMode=!flagMode;$('flagBtn').classList.toggle('on',flagMode);toast(flagMode?'깃발 모드 켜짐':'깃발 모드 꺼짐')};
-$('rankBtn').onclick=()=>openRank(lv);
+$('rankBtn').onclick=()=>{setPause(true,true);openRank(lv)};
+$('pauseBtn').onclick=()=>setPause(!paused);
+$('pz').onclick=()=>setPause(false);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)setPause(true,true)});
 $('rank2Btn').onclick=()=>{hide('winOv');openRank(lastWin?lastWin.lv:lv)};
 $('againBtn').onclick=()=>{hide('winOv');newGame()};
 $('mHelp').onclick=()=>show('helpOv');
