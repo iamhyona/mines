@@ -366,16 +366,20 @@ $('saveBtn').onclick=async()=>{
 };
 let rankTab=0, remote=null;
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{rankTab=+b.dataset.t;renderRank()});
+let rankLoading=false;
+function allRanks(){const seen=new Set(),out=[];for(const r of [...(remote||[]),...localRanks()]){const k=r.n+'|'+r.t+'|'+r.l;if(!seen.has(k)){seen.add(k);out.push(r)}}return out}
+function pickTab(){const a=allRanks();if(!a.some(r=>+r.l===rankTab)){const f=LV.findIndex((_,i)=>a.some(r=>+r.l===i));if(f>=0)rankTab=f}}
 async function openRank(t){
-  rankTab=t; show('rankOv'); renderRank();
-  if(RANK_URL){ $('list').insertAdjacentHTML('beforeend',''); try{const r=await fetch(`${RANK_URL}?g=mines`);const j=await r.json();remote=j.top||[];renderRank()}catch(e){} }
+  rankTab=t; show('rankOv'); rankLoading=!!RANK_URL; pickTab(); renderRank();
+  if(RANK_URL){ try{const r=await fetch(`${RANK_URL}?g=mines&_=${Date.now()}`,{cache:'no-store'});const j=await r.json();remote=j.top||[]}catch(e){} rankLoading=false; if(t===rankTab||!allRanks().some(r=>+r.l===rankTab))pickTab(); renderRank() }
 }
 function renderRank(){
-  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',+b.dataset.t===rankTab));
-  let rows=(remote||localRanks()).filter(r=>+r.l===rankTab).sort((a,b)=>a.t-b.t);
+  const all=allRanks();
+  document.querySelectorAll('#tabs button').forEach(b=>{const t=+b.dataset.t,c=all.filter(r=>+r.l===t).length;b.classList.toggle('on',t===rankTab);b.textContent=LV[t].n+(c?` ${c}`:'')});
+  let rows=all.filter(r=>+r.l===rankTab).sort((a,b)=>a.t-b.t);
   const me=lastWin&&lastWin.saved&&lastWin.lv===rankTab?lastWin:null;
   $('list').innerHTML=rows.length?rows.map((r,k)=>`<div class="${me&&r.n===me.n&&+r.t===me.ms?'me':''}"><span class="rk">${k+1}</span><span>${esc(r.n)}</span><span class="t">${(r.t/1000).toFixed(2)}</span></div>`).join('')
-    :'<div class="em">아직 기록이 없어요</div>';
+    :`<div class="em">${rankLoading?'불러오는 중…':'아직 기록이 없어요'}</div>`;
 }
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
