@@ -116,6 +116,14 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 </style>
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html{height:var(--app-h,100%)!important}body{min-height:var(--app-h,100%)!important}.wellg{max-height:calc(var(--app-h,100dvh) - 270px)!important}</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap">
+<style>/* 페트리스풍 영문 픽셀 폰트 통일 */
+.led{font:700 20px/1 Silkscreen,monospace!important;padding:8px 10px!important;letter-spacing:.06em}
+.led s{display:none!important}
+.led b{position:static!important;font-weight:700!important}
+.big{font:700 30px/1 Silkscreen,monospace!important;letter-spacing:.05em}
+.list .t{font-family:Silkscreen,monospace!important;font-weight:700;font-size:12px!important}
+</style>
 </head>
 <body>
 <div class="win" id="win">
