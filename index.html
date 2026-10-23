@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792731451";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -138,6 +139,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .tut .dots i.on{background:#7c9cff;width:18px;border-radius:4px}
 .tut .skip{background:none;border:0;color:var(--sub);font-weight:700;font-size:13px;flex:0 0 auto;padding:0 10px}
 .help .again{display:block;width:100%;margin-top:10px}
+.nos{display:flex;align-items:center;justify-content:center;gap:7px;margin:12px 0 0;font-size:13px;font-weight:700;color:var(--sub);cursor:pointer}
+.nos input{width:17px;height:17px;margin:0;accent-color:#4c5fd7}
+.menu .snd.off{opacity:.45}
 /* ── 효과 ── */
 .g i{position:relative}
 .g i.o.rv{animation:rv .28s cubic-bezier(.34,1.56,.64,1) var(--d,0ms) both}
@@ -162,7 +166,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .g i.wf svg{animation:fl .45s cubic-bezier(.34,1.8,.5,1) var(--d,0ms) both}
 .win.glow{animation:glow 1.4s ease-out}
 @keyframes glow{0%{box-shadow:0 0 0 0 rgba(255,212,59,.9),0 18px 40px rgba(0,0,0,.45)}40%{box-shadow:0 0 0 6px rgba(255,212,59,.55),0 0 50px rgba(255,212,59,.5)}100%{box-shadow:0 0 0 0 rgba(255,212,59,0),0 18px 40px rgba(0,0,0,.45)}}
-@media (prefers-reduced-motion:reduce){.g i,.g i svg,.g i::before,.win,#flash{animation:none!important}}
+
 </style>
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html{height:var(--app-h,100%)!important}body{min-height:var(--app-h,100%)!important}.wellg{max-height:calc(var(--app-h,100dvh) - 270px)!important}</style>
@@ -179,7 +183,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 <div class="win" id="win">
   <div class="tb"><span class="ttl"><svg width="18" height="18" viewBox="0 0 16 16"><use href="#i-mine"/></svg>지뢰찾기</span><button class="x" id="xBtn" aria-label="새 게임"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1L9 9M9 1L1 9" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button></div>
   <div class="menu">
-    <button id="mGame">게임</button><button id="mHelp">도움말</button>
+    <button id="mGame">게임</button><button id="mHelp">도움말</button><button class="snd" id="mSnd">소리 켬</button>
     <button class="lv" id="lvLbl">중급 · 16×20</button>
     <div class="drop" id="drop">
       <button data-n="1">새 게임<small>F2</small></button><hr>
@@ -234,6 +238,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
   <div id="tutBody"></div>
   <div class="dots" id="tutDots"></div>
   <div class="btns"><button class="btn skip" id="tutSkip">건너뛰기</button><button class="btn raised" id="tutPrev">이전</button><button class="btn pri" id="tutNext">다음</button></div>
+  <label class="nos"><input type="checkbox" id="tutNo">다시 보지 않기</label>
 </div></div></div>
 
 <svg width="0" height="0" style="position:absolute">
@@ -326,6 +331,7 @@ function open(i){
   const q=[i],dep=new Map([[i,0]]);
   for(let h=0;h<q.length;h++){const j=q[h]; if(state[j]!==0) continue; state[j]=1; opened++; draw(j,dep.get(j));
     if(cnt[j]===0) for(const k of nb(j)) if(state[k]===0&&!mine[k]&&!dep.has(k)){dep.set(k,dep.get(j)+1);q.push(k)}}
+  sfx('open',q.length);
   if(opened===W*H-M) win();
 }
 function chord(i){
@@ -337,7 +343,7 @@ function chord(i){
 }
 function flag(i){
   if(over||state[i]===1) return;
-  state[i]=state[i]===2?0:2; flags+=state[i]===2?1:-1; draw(i); if(state[i]===2) cells[i].classList.add('fl'); setLed('mineLed',M-flags);
+  state[i]=state[i]===2?0:2; flags+=state[i]===2?1:-1; draw(i); if(state[i]===2) cells[i].classList.add('fl'); sfx(state[i]===2?'flag':'unflag'); setLed('mineLed',M-flags);
   if(navigator.vibrate) navigator.vibrate(18);
 }
 let lastI=0;
@@ -361,7 +367,6 @@ function lose(i){
   beep('lose'); boomSnd();
 }
 function boomFx(cx,cy){
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   let cv=$('fx'); if(!cv){cv=document.createElement('canvas');cv.id='fx';cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55';document.body.appendChild(cv)}
   const dpr=Math.min(devicePixelRatio||1,2), VW=innerWidth, VH=innerHeight; cv.width=VW*dpr; cv.height=VH*dpr;
   const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
@@ -380,7 +385,7 @@ function boomFx(cx,cy){
     if(alive||e<.5) requestAnimationFrame(f); else x.clearRect(0,0,VW,VH);
   })(t0);
 }
-function boomSnd(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const t=ac.currentTime,n=ac.sampleRate*.6|0,buf=ac.createBuffer(1,n,ac.sampleRate),d=buf.getChannelData(0);
+function boomSnd(){if(!sndOn)return;try{AC();const t=ac.currentTime,n=ac.sampleRate*.6|0,buf=ac.createBuffer(1,n,ac.sampleRate),d=buf.getChannelData(0);
   for(let k=0;k<n;k++)d[k]=(Math.random()*2-1)*Math.pow(1-k/n,2.2);
   const src=ac.createBufferSource(),lp=ac.createBiquadFilter(),g=ac.createGain();src.buffer=buf;lp.type='lowpass';lp.frequency.setValueAtTime(1800,t);lp.frequency.exponentialRampToValueAtTime(140,t+.5);
   g.gain.setValueAtTime(.32,t);g.gain.exponentialRampToValueAtTime(.001,t+.6);src.connect(lp).connect(g).connect(ac.destination);src.start(t)}catch(e){}}
@@ -406,7 +411,6 @@ function win(){
   },far+1100));
 }
 function confettiFx(){
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   let cv=$('fx'); if(!cv){cv=document.createElement('canvas');cv.id='fx';cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55';document.body.appendChild(cv)}
   const dpr=Math.min(devicePixelRatio||1,2), VW=innerWidth, VH=innerHeight; cv.width=VW*dpr; cv.height=VH*dpr;
   const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
@@ -426,7 +430,19 @@ function confettiFx(){
 }
 /* sound */
 let ac;
-function beep(k){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const t=ac.currentTime;
+let sndOn=(()=>{try{return localStorage.getItem('mines-snd')!=='0'}catch(e){return true}})();
+function AC(){ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();return ac}
+function tn(f1,f2,dur,type,vol,at){const a=AC(),t=a.currentTime+(at||0),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.004);g.gain.exponentialRampToValueAtTime(.0008,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.02)}
+let lastS=0;
+function sfx(k,n){if(!sndOn)return;const now=performance.now();if(k==='open'&&now-lastS<35)return;lastS=now;try{
+  if(k==='open'){tn(1400,520,.05,'triangle',.16);tn(2600,1800,.02,'sine',.05);
+    if(n>6){[1047,1319,1568,2093].forEach((f,i)=>tn(f,f*1.01,.12,'sine',.045,.05+i*.045))}}
+  else if(k==='flag'){tn(740,760,.06,'square',.05);tn(1110,1130,.08,'square',.05,.06)}
+  else if(k==='unflag'){tn(880,860,.05,'square',.045);tn(560,540,.07,'square',.045,.05)}
+  else if(k==='ui'){tn(1000,700,.035,'triangle',.1)}
+}catch(e){}}
+function beep(k){if(!sndOn)return;try{AC();const t=ac.currentTime;
   const seq=k==='win'?[[523,0],[659,.09],[784,.18],[1047,.27]]:[[220,0],[150,.12],[90,.24]];
   for(const [f,d] of seq){const o=ac.createOscillator(),g=ac.createGain();o.type=k==='win'?'square':'sawtooth';o.frequency.value=f;
     g.gain.setValueAtTime(.06,t+d);g.gain.exponentialRampToValueAtTime(.001,t+d+.16);o.connect(g).connect(ac.destination);o.start(t+d);o.stop(t+d+.17)}
@@ -497,8 +513,10 @@ function show(id){$(id).classList.add('show')}
 function hide(id){$(id).classList.remove('show')}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.ov').classList.remove('show'));
 document.querySelectorAll('.ov').forEach(o=>o.addEventListener('pointerdown',e=>{if(e.target===o&&o.id!=='winOv'){o.classList.remove('show');if(o.id==='tutOv')tutDone()}}));
-$('face').onclick=newGame; $('xBtn').onclick=newGame;
-$('flagBtn').onclick=()=>{flagMode=!flagMode;$('flagBtn').classList.toggle('on',flagMode);toast(flagMode?'깃발 모드 켜짐 · 누르면 깃발':'깃발 모드 꺼짐')};
+$('face').onclick=()=>{sfx('ui');newGame()}; $('xBtn').onclick=()=>{sfx('ui');newGame()};
+function sndLbl(){$('mSnd').textContent=sndOn?'소리 켬':'소리 끔';$('mSnd').classList.toggle('off',!sndOn)}sndLbl();
+$('mSnd').onclick=()=>{sndOn=!sndOn;try{localStorage.setItem('mines-snd',sndOn?'1':'0')}catch(e){}sndLbl();sfx('ui');toast(sndOn?'효과음 켜짐':'효과음 꺼짐')};
+$('flagBtn').onclick=()=>{sfx('ui');flagMode=!flagMode;$('flagBtn').classList.toggle('on',flagMode);toast(flagMode?'깃발 모드 켜짐 · 누르면 깃발':'깃발 모드 꺼짐')};
 $('rankBtn').onclick=()=>{setPause(true,true);openRank(lv)};
 $('pauseBtn').onclick=()=>setPause(!paused);
 $('pz').onclick=()=>setPause(false);
@@ -568,15 +586,15 @@ function tutDraw(){const t=TUT[tutI];
   $('tutPrev').style.display=tutI?'':'none'; $('tutSkip').style.display=tutI<TUT.length-1?'':'none';
   $('tutNext').textContent=tutI<TUT.length-1?'다음':'시작하기';
 }
-function tutOpen(){tutI=0;tutDraw();show('tutOv')}
-function tutDone(){hide('tutOv');try{localStorage.setItem('mines-tut','1')}catch(e){}}
+function tutOpen(){tutI=0;tutDraw();try{$('tutNo').checked=!!localStorage.getItem('mines-tut')}catch(e){}show('tutOv')}
+function tutDone(){hide('tutOv');try{if($('tutNo').checked)localStorage.setItem('mines-tut','1');else localStorage.removeItem('mines-tut')}catch(e){}}
 $('tutNext').onclick=()=>{if(tutI<TUT.length-1){tutI++;tutDraw()}else tutDone()};
 $('tutPrev').onclick=()=>{if(tutI){tutI--;tutDraw()}};
 $('tutSkip').onclick=tutDone;
 $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 
 newGame();
-try{if(!localStorage.getItem('mines-tut')&&!localStorage.getItem('mines-ranks'))setTimeout(tutOpen,350)}catch(e){}
+try{if(!localStorage.getItem('mines-tut'))setTimeout(tutOpen,350)}catch(e){}
 </script>
 </body>
 </html>
