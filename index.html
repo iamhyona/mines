@@ -138,6 +138,26 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .tut .dots i.on{background:#7c9cff;width:18px;border-radius:4px}
 .tut .skip{background:none;border:0;color:var(--sub);font-weight:700;font-size:13px;flex:0 0 auto;padding:0 10px}
 .help .again{display:block;width:100%;margin-top:10px}
+/* ── 효과 ── */
+.g i{position:relative}
+.g i.o.rv{animation:rv .28s cubic-bezier(.34,1.56,.64,1) var(--d,0ms) both}
+@keyframes rv{0%{transform:scale(.3);opacity:0;background:#6a7080}100%{transform:none;opacity:1}}
+.g i.o.n1{text-shadow:0 0 7px rgba(110,160,255,.6)}.g i.o.n2{text-shadow:0 0 7px rgba(76,209,138,.55)}.g i.o.n3{text-shadow:0 0 7px rgba(255,107,120,.6)}.g i.o.n4{text-shadow:0 0 7px rgba(177,151,252,.6)}
+.g i.o.n5{text-shadow:0 0 7px rgba(255,169,77,.6)}.g i.o.n6{text-shadow:0 0 7px rgba(59,201,219,.6)}.g i.o.n7,.g i.o.n8{text-shadow:0 0 7px rgba(255,255,255,.4)}
+.g i.fl svg{animation:fl .45s cubic-bezier(.34,1.8,.5,1) both}
+@keyframes fl{0%{transform:translateY(-110%) rotate(-20deg) scale(.5);opacity:0}50%{opacity:1}100%{transform:none}}
+.g i.fl::before{content:'';position:absolute;inset:-1px;border-radius:4px;border:2px solid #ff4d5e;animation:ring .5s ease-out .15s both;pointer-events:none}
+@keyframes ring{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+.g i.boom{animation:bm 1s ease-out both;z-index:2}
+@keyframes bm{0%{background:#fff6c8;transform:scale(1.6)}20%{background:#ff922b;transform:scale(1.2)}100%{background:#c92a3a;transform:none}}
+.g i.mp{animation:mp .32s cubic-bezier(.34,1.7,.6,1) both}
+@keyframes mp{0%{transform:scale(.2) rotate(-40deg);opacity:0;background:#ff922b}100%{transform:none;opacity:1}}
+.win.shake{animation:shake .5s}
+@keyframes shake{10%,90%{transform:translate(-2px,1px)}20%,80%{transform:translate(5px,-2px)}30%,50%,70%{transform:translate(-7px,3px)}40%,60%{transform:translate(7px,-2px)}}
+#flash{position:fixed;inset:0;pointer-events:none;z-index:39;opacity:0;background:radial-gradient(circle at var(--fx,50%) var(--fy,50%),rgba(255,190,90,.55),rgba(201,42,58,.28) 35%,transparent 75%)}
+#flash.on{animation:fla .7s ease-out}
+@keyframes fla{0%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.g i,.g i svg,.g i::before,.win,#flash{animation:none!important}}
 </style>
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
 <style>html{height:var(--app-h,100%)!important}body{min-height:var(--app-h,100%)!important}.wellg{max-height:calc(var(--app-h,100dvh) - 270px)!important}</style>
@@ -178,7 +198,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
   <button class="fb raised" id="rankBtn">랭킹</button>
 </div>
 <div class="credit">이 게임은 서울 마포구에 사는 박현아가 만든 비상업용 게임이에요.<br>지치고 힘들 때 잠시 머리 식히며 마음껏 즐겨 주세요.</div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast"></div><div id="flash"></div>
 
 <div class="ov" id="winOv"><div class="md"><div class="tb"><span class="ttl">클리어!</span></div><div class="bd">
   <h2 id="winTitle">지뢰를 모두 찾았어요</h2>
@@ -240,6 +260,7 @@ function newGame(){
   const L=LV[lv]; rot = L.w>L.h && isPortraitNarrow();
   W=rot?L.h:L.w; H=rot?L.w:L.h; M=L.m;
   mine=new Uint8Array(W*H); state=new Uint8Array(W*H); cnt=new Uint8Array(W*H);
+  fxT.forEach(clearTimeout); fxT=[]; $('win').classList.remove('shake');
   started=false; over=false; flags=0; opened=0; clearInterval(timer); t0=0; setPause(false,true);
   $('lvLbl').textContent=`${L.n} · ${L.w}×${L.h}`;
   [...document.querySelectorAll('.drop [data-lv]')].forEach(b=>b.classList.toggle('cur',+b.dataset.lv===lv));
@@ -286,9 +307,9 @@ function plant(safe){
   started=true; t0=performance.now();
   runTimer(); setLed('timeLed',1);
 }
-function draw(i){
+function draw(i,d){
   const c=cells[i], s=state[i];
-  if(s===1){c.className='o'+(cnt[i]?' n'+cnt[i]:'');c.textContent=cnt[i]||''}
+  if(s===1){c.className='o'+(cnt[i]?' n'+cnt[i]:'')+(d!=null?' rv':'');c.textContent=cnt[i]||'';if(d!=null)c.style.setProperty('--d',Math.min(d*24,480)+'ms')}
   else if(s===2){c.className='u';c.innerHTML='<svg viewBox="0 0 16 16"><use href="#i-flag"/></svg>'}
   else {c.className='u';c.textContent=''}
 }
@@ -296,9 +317,9 @@ function open(i){
   if(over||state[i]!==0) return;
   if(!started) plant(i);
   if(mine[i]) return lose(i);
-  const st=[i];
-  while(st.length){const j=st.pop(); if(state[j]!==0) continue; state[j]=1; opened++; draw(j);
-    if(cnt[j]===0) for(const k of nb(j)) if(state[k]===0&&!mine[k]) st.push(k);}
+  const q=[i],dep=new Map([[i,0]]);
+  for(let h=0;h<q.length;h++){const j=q[h]; if(state[j]!==0) continue; state[j]=1; opened++; draw(j,dep.get(j));
+    if(cnt[j]===0) for(const k of nb(j)) if(state[k]===0&&!mine[k]&&!dep.has(k)){dep.set(k,dep.get(j)+1);q.push(k)}}
   if(opened===W*H-M) win();
 }
 function chord(i){
@@ -310,19 +331,52 @@ function chord(i){
 }
 function flag(i){
   if(over||state[i]===1) return;
-  state[i]=state[i]===2?0:2; flags+=state[i]===2?1:-1; draw(i); setLed('mineLed',M-flags);
+  state[i]=state[i]===2?0:2; flags+=state[i]===2?1:-1; draw(i); if(state[i]===2) cells[i].classList.add('fl'); setLed('mineLed',M-flags);
   if(navigator.vibrate) navigator.vibrate(18);
 }
+const MINE='<svg viewBox="0 0 16 16"><use href="#i-mine"/></svg>';
+let fxT=[];
 function lose(i){
   over=true; clearInterval(timer); setFace('dead');
+  cells[i].className='o boom'; cells[i].innerHTML=MINE;
+  const r=cells[i].getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+  boomFx(cx,cy);
+  const fl=$('flash'); fl.style.setProperty('--fx',cx+'px'); fl.style.setProperty('--fy',cy+'px'); fl.classList.remove('on'); void fl.offsetWidth; fl.classList.add('on');
+  const w=$('win'); w.classList.remove('shake'); void w.offsetWidth; w.classList.add('shake');
+  const xi=i%W, yi=(i/W)|0; let last=0;
   for(let j=0;j<W*H;j++){
-    if(mine[j]&&state[j]!==2){cells[j].className='o';cells[j].innerHTML='<svg viewBox="0 0 16 16"><use href="#i-mine"/></svg>'}
-    else if(!mine[j]&&state[j]===2){cells[j].className='o';cells[j].innerHTML='<svg viewBox="0 0 16 16"><use href="#i-x"/></svg>'}
+    if(j===i) continue;
+    if(mine[j]&&state[j]!==2){const d=Math.min(160+Math.hypot(j%W-xi,((j/W)|0)-yi)*55,1400);last=Math.max(last,d);
+      fxT.push(setTimeout(()=>{cells[j].className='o mp';cells[j].innerHTML=MINE},d))}
   }
-  cells[i].className='o boom';
+  fxT.push(setTimeout(()=>{for(let j=0;j<W*H;j++) if(!mine[j]&&state[j]===2){cells[j].className='o mp';cells[j].innerHTML='<svg viewBox="0 0 16 16"><use href="#i-x"/></svg>'}},last+150));
   if(navigator.vibrate) navigator.vibrate([60,40,120]);
-  beep('lose');
+  beep('lose'); boomSnd();
 }
+function boomFx(cx,cy){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  let cv=$('fx'); if(!cv){cv=document.createElement('canvas');cv.id='fx';cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40';document.body.appendChild(cv)}
+  const dpr=Math.min(devicePixelRatio||1,2), VW=innerWidth, VH=innerHeight; cv.width=VW*dpr; cv.height=VH*dpr;
+  const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
+  const cols=['#fff6c8','#ffd43b','#ff922b','#ff4d5e','#e8590c'], P=[];
+  for(let k=0;k<52;k++){const a=Math.random()*Math.PI*2,v=2.5+Math.random()*7.5;P.push({x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v-2.5,r:1.4+Math.random()*3.4,c:cols[k%5],l:1,s:0})}
+  for(let k=0;k<16;k++){const a=Math.random()*Math.PI*2,v=.4+Math.random()*1.6;P.push({x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v-.7,r:7+Math.random()*9,c:'#8a8f99',l:1,s:1})}
+  const t0=performance.now();
+  (function f(t){const e=(t-t0)/1000; x.clearRect(0,0,VW,VH);
+    if(e<.14){const g2=x.createRadialGradient(cx,cy,0,cx,cy,110);g2.addColorStop(0,`rgba(255,250,225,${1-e/.14})`);g2.addColorStop(1,'rgba(255,120,40,0)');x.fillStyle=g2;x.fillRect(cx-110,cy-110,220,220)}
+    if(e<.5){const k=e/.5;x.beginPath();x.arc(cx,cy,8+k*240,0,7);x.strokeStyle=`rgba(255,200,130,${.75*(1-k)})`;x.lineWidth=5*(1-k)+1;x.stroke()}
+    let alive=0;
+    for(const p of P){p.l-=p.s?.011:.021; if(p.l<=0) continue; alive++;
+      p.x+=p.vx; p.y+=p.vy; p.vx*=.955; p.vy=p.vy*.955+(p.s?-.035:.2);
+      x.globalAlpha=p.l*(p.s?.32:1); x.fillStyle=p.c; x.beginPath(); x.arc(p.x,p.y,p.s?p.r*(1.7-p.l*.7):p.r*p.l+.4,0,7); x.fill()}
+    x.globalAlpha=1;
+    if(alive||e<.5) requestAnimationFrame(f); else x.clearRect(0,0,VW,VH);
+  })(t0);
+}
+function boomSnd(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const t=ac.currentTime,n=ac.sampleRate*.6|0,buf=ac.createBuffer(1,n,ac.sampleRate),d=buf.getChannelData(0);
+  for(let k=0;k<n;k++)d[k]=(Math.random()*2-1)*Math.pow(1-k/n,2.2);
+  const src=ac.createBufferSource(),lp=ac.createBiquadFilter(),g=ac.createGain();src.buffer=buf;lp.type='lowpass';lp.frequency.setValueAtTime(1800,t);lp.frequency.exponentialRampToValueAtTime(140,t+.5);
+  g.gain.setValueAtTime(.32,t);g.gain.exponentialRampToValueAtTime(.001,t+.6);src.connect(lp).connect(g).connect(ac.destination);src.start(t)}catch(e){}}
 function win(){
   over=true; clearInterval(timer);
   const ms=performance.now()-t0; setLed('timeLed',Math.ceil(ms/1000));
@@ -350,11 +404,13 @@ const g=$('g'); let pt=null, lastPT='mouse';
 const HOLD=300, SLOP=14;
 /* PC 마우스: 왼쪽=열기 · 오른쪽(맥 두 손가락·ctrl+클릭)=깃발 · 왼쪽+오른쪽 같이/가운데=주변 한 번에 열기 */
 g.addEventListener('contextmenu',e=>e.preventDefault());
-let mb=null;
+let mb=null, lastTouch=-1e9;
+const fromTouch=()=>performance.now()-lastTouch<1200; /* 터치 후 따라오는 가짜 마우스 이벤트 무시 */
 function clearPress(){for(const c of g.querySelectorAll('i.press'))c.classList.remove('press')}
 function pressAround(i){clearPress();for(const j of [i,...nb(i)])if(state[j]===0)cells[j].classList.add('press')}
 const cellAt=e=>{const c=e.target.closest&&e.target.closest('#g i');return c?+c.dataset.i:-1};
 g.addEventListener('mousedown',e=>{
+  if(fromTouch()) return;
   const i=cellAt(e); if(i<0||over||paused) return; e.preventDefault();
   if(mb&&mb.dead) return;
   if(e.button===1||(e.buttons&3)===3){mb={both:true,i};pressAround(i);setFace('oh');return}
@@ -363,11 +419,11 @@ g.addEventListener('mousedown',e=>{
   if(!right&&state[i]===0&&!flagMode){cells[i].classList.add('press');setFace('oh')}
 });
 g.addEventListener('mousemove',e=>{
-  if(!mb||mb.dead) return; const i=cellAt(e); if(i<0||i===mb.i) return; mb.i=i;
+  if(!mb||mb.dead||fromTouch()) return; const i=cellAt(e); if(i<0||i===mb.i) return; mb.i=i;
   if(mb.both) pressAround(i); else if(!mb.right){clearPress(); if(state[i]===0&&!flagMode) cells[i].classList.add('press')}
 });
 addEventListener('mouseup',e=>{
-  if(!mb) return;
+  if(!mb||fromTouch()) return;
   if(mb.dead){ if(e.buttons===0) mb=null; return }
   const m=mb; clearPress(); if(!over) setFace('smile');
   mb=e.buttons===0?null:{dead:true};
@@ -379,7 +435,7 @@ addEventListener('mouseup',e=>{
   if(flagMode) flag(i); else if(state[i]===0) open(i);
 });
 g.addEventListener('pointerdown',e=>{
-  lastPT=e.pointerType;
+  lastPT=e.pointerType; if(e.pointerType!=='mouse') lastTouch=performance.now();
   const c=e.target.closest('i'); if(!c||over||paused) return;
   const i=+c.dataset.i;
   if(e.pointerType==='mouse') return;
@@ -394,6 +450,7 @@ g.addEventListener('pointerdown',e=>{
 function endPress(){ if(!pt) return; clearTimeout(pt.timer); const c=cells[pt.i]; c&&c.classList.remove('press','hold'); if(!over) setFace('smile'); }
 g.addEventListener('pointermove',e=>{ if(pt&&Math.hypot(e.clientX-pt.x,e.clientY-pt.y)>(e.pointerType==='mouse'?10:SLOP)){endPress();pt=null} });
 g.addEventListener('pointerup',e=>{
+  if(e.pointerType!=='mouse') lastTouch=performance.now();
   if(!pt) return; endPress(); const p=pt; pt=null; if(p.done||over) return;
   const i=p.i;
   if(state[i]===1){chord(i);return}
