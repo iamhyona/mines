@@ -186,6 +186,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .led b{position:static!important;font-weight:700!important}
 .big{font:700 30px/1 Silkscreen,monospace!important;letter-spacing:.05em}
 .list .t{font-family:Silkscreen,monospace!important;font-weight:700;font-size:12px!important}
+@media (max-width:599px){body{padding-left:4px!important;padding-right:4px!important}} /* 모바일: 좌우 여백 줄여 판 크게 */
 </style>
 </head>
 <body>
@@ -306,15 +307,16 @@ function build(){
   g.innerHTML=h; cells=g.children;
 }
 function fit(){
+  const mob=innerWidth<600; // 모바일: 여백 줄이고 칸을 크게 (넘치면 판을 밀어서 보기)
   const gap = W>12?2:3;
-  const availW=Math.min(innerWidth-20, 980)-12-12;
+  const availW=mob?innerWidth-8-12-12:Math.min(innerWidth-20, 980)-12-12;
   let c=Math.floor((availW-(W-1)*gap)/W);
-  const availH=innerHeight-260;
+  const availH=innerHeight-(mob?230:260);
   const cH=Math.floor((availH-(H-1)*gap)/H);
   if(cH>=20) c=Math.min(c,cH);
-  c=Math.max(17,Math.min(c,42));
+  c=Math.max(mob?26:17,Math.min(c,mob?44:42));
   const g=$('g'); g.style.setProperty('--c',c+'px'); g.style.setProperty('--b',(c>=30?3:2)+'px'); g.style.setProperty('--gap',gap+'px');
-  $('win').style.width=$('ft').style.width=Math.min(W*c+(W-1)*gap+12+12,innerWidth-20)+'px';
+  $('win').style.width=$('ft').style.width=Math.min(W*c+(W-1)*gap+12+12,innerWidth-(mob?8:20))+'px';
   requestAnimationFrame(()=>{const w=$('well');w.classList.toggle('fixed',w.scrollHeight<=w.clientHeight+1&&w.scrollWidth<=w.clientWidth+1)});
 }
 function setLed(id,v){v=Math.max(-99,Math.min(999,v|0));$(id).textContent=v<0?'-'+String(-v).padStart(2,'0'):String(v).padStart(3,'0')}
