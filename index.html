@@ -197,7 +197,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
   <ul>
   <li>칸을 눌러 열어요. 숫자는 주변 8칸에 있는 <b>지뢰 수</b>예요.</li>
   <li>지뢰라고 생각되는 칸엔 <b>깃발</b>을 꽂아요.<br>PC: <b>오른쪽 클릭</b> · 모바일: <b>길게 누르기</b> 또는 아래 <b>깃발 버튼</b>을 켜고 누르기</li>
-  <li>숫자만큼 깃발을 꽂은 뒤 그 숫자를 누르면 주변 칸이 한 번에 열려요.</li>
+  <li>숫자만큼 깃발을 꽂은 뒤 그 숫자를 누르면 주변 칸이 한 번에 열려요. (PC: <b>왼쪽+오른쪽 같이 클릭</b>도 돼요)</li>
   <li>첫 칸은 절대 지뢰가 아니에요.</li>
   <li>지뢰가 아닌 칸을 모두 열면 클리어! 기록은 난이도별로 랭킹에 올라가요.</li>
   </ul>
@@ -348,20 +348,41 @@ function beep(k){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)
 /* input */
 const g=$('g'); let pt=null, lastPT='mouse';
 const HOLD=300, SLOP=14;
-/* 오른쪽 클릭(맥 트랙패드 두 손가락·ctrl+클릭 포함)은 contextmenu로 처리 */
-g.addEventListener('contextmenu',e=>{
-  e.preventDefault();
-  if(lastPT!=='mouse'||over||paused) return;
-  const c=e.target.closest('i'); if(!c) return;
-  const i=+c.dataset.i;
-  if(pt){endPress();pt=null}
-  if(state[i]===1) chord(i); else flag(i);
+/* PC 마우스: 왼쪽=열기 · 오른쪽(맥 두 손가락·ctrl+클릭)=깃발 · 왼쪽+오른쪽 같이/가운데=주변 한 번에 열기 */
+g.addEventListener('contextmenu',e=>e.preventDefault());
+let mb=null;
+function clearPress(){for(const c of g.querySelectorAll('i.press'))c.classList.remove('press')}
+function pressAround(i){clearPress();for(const j of [i,...nb(i)])if(state[j]===0)cells[j].classList.add('press')}
+const cellAt=e=>{const c=e.target.closest&&e.target.closest('#g i');return c?+c.dataset.i:-1};
+g.addEventListener('mousedown',e=>{
+  const i=cellAt(e); if(i<0||over||paused) return; e.preventDefault();
+  if(mb&&mb.dead) return;
+  if(e.button===1||(e.buttons&3)===3){mb={both:true,i};pressAround(i);setFace('oh');return}
+  const right=e.button===2||(e.button===0&&e.ctrlKey);
+  mb={both:false,i,right};
+  if(!right&&state[i]===0&&!flagMode){cells[i].classList.add('press');setFace('oh')}
+});
+g.addEventListener('mousemove',e=>{
+  if(!mb||mb.dead) return; const i=cellAt(e); if(i<0||i===mb.i) return; mb.i=i;
+  if(mb.both) pressAround(i); else if(!mb.right){clearPress(); if(state[i]===0&&!flagMode) cells[i].classList.add('press')}
+});
+addEventListener('mouseup',e=>{
+  if(!mb) return;
+  if(mb.dead){ if(e.buttons===0) mb=null; return }
+  const m=mb; clearPress(); if(!over) setFace('smile');
+  mb=e.buttons===0?null:{dead:true};
+  if(over||paused) return;
+  const i=m.i;
+  if(m.both){chord(i);return}
+  if(m.right){ if(state[i]===1) chord(i); else flag(i); return }
+  if(state[i]===1){chord(i);return}
+  if(flagMode) flag(i); else if(state[i]===0) open(i);
 });
 g.addEventListener('pointerdown',e=>{
   lastPT=e.pointerType;
   const c=e.target.closest('i'); if(!c||over||paused) return;
   const i=+c.dataset.i;
-  if(e.pointerType==='mouse'){ if(e.button!==0||e.ctrlKey) return; }
+  if(e.pointerType==='mouse') return;
   pt={i,x:e.clientX,y:e.clientY,done:false,id:e.pointerId};
   if(state[i]===0&&!flagMode){c.classList.add('press');setFace('oh')}
   if(e.pointerType!=='mouse'){
@@ -446,7 +467,7 @@ const TUT=[
   how:touchy?['<b>칸을 꾹</b> 누르고 있으면 빨갛게 차오르면서 깃발이 꽂혀요','또는 아래 <b>깃발 모드</b>를 켜고 칸을 누르기 (한 번 더 누르면 깃발 빼기)']
             :['칸에 <b>오른쪽 클릭</b>','맥 트랙패드: <b>두 손가락 클릭</b> 또는 <b>control + 클릭</b>']},
  {h:'숫자를 누르면 한 번에 열려요',d:grid([T('o n1','1'),T('u',FL),T('u'),T('o'),T('o n1 hl','1'),T('u'),T('o'),T('o'),T('o')])+'<span class="arr">→</span>'+grid([T('o n1','1'),T('u',FL),T('o n1','1'),T('o'),T('o n1','1'),T('o n1','1'),T('o'),T('o'),T('o')]),
-  p:'숫자만큼 깃발을 꽂은 뒤 그 <b>숫자를 누르면</b> 나머지 주변 칸이 한꺼번에 열려요. 빨리 깨는 비법!'},
+  p:'숫자만큼 깃발을 꽂은 뒤 그 <b>숫자를 누르면</b> 나머지 주변 칸이 한꺼번에 열려요. 빨리 깨는 비법!'+(touchy?'':'<br>PC에선 <b>왼쪽+오른쪽 같이 클릭</b>해도 돼요.')},
  {h:'지뢰 빼고 다 열면 클리어!',d:'<svg viewBox="0 0 16 16" width="54" height="54"><use href="#i-trophy"/></svg>',
   p:'<b>첫 칸은 절대 지뢰가 아니니</b> 아무 데나 눌러 시작하세요.<br>지뢰가 아닌 칸을 모두 열면 클리어, <b>빠를수록 랭킹 위로</b> 올라가요.<br>난이도는 위쪽 <b>게임</b> 메뉴에서 바꿀 수 있어요.'}
 ];
