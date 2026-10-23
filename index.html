@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792773000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792793000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -190,8 +190,19 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .tabs.dvt{margin-bottom:6px}.tabs.dvt button{height:30px}
 /* 계급별 상단 색 */#win[data-lv="0"]>.tb{background:#2f9e5a}#win[data-lv="1"]>.tb{background:#4458d8}#win[data-lv="2"]>.tb{background:#7a4fd6}#win[data-lv="3"]>.tb{background:#d6334f}#win[data-lv="4"]>.tb{background:linear-gradient(90deg,#2f3b23,#4a5a2a)} /* 모바일: 좌우 여백 줄여 판 크게 */
 </style>
+<style>/* 다른 게임들처럼 맨 위 무지개 줄 + 크레딧 (앱 모드에선 ◀ PARK HYONA'S 게임이름) */
+html{background:#0f1418}
+.lcd-label{display:flex;align-items:center;gap:8px;padding:2px 2px 10px;white-space:nowrap;overflow:hidden;box-sizing:border-box;align-self:stretch;width:100%;max-width:560px;margin:0 auto;flex-shrink:0}
+.lcd-label .ln{flex:1 1 0;min-width:0;height:7px;background:linear-gradient(90deg,#e8284f 0 14.28%,#f26a0d 14.28% 28.57%,#f2b000 28.57% 42.85%,#10b870 42.85% 57.14%,#00a8e0 57.14% 71.42%,#2a5ef0 71.42% 85.71%,#8a3cf0 85.71% 100%);-webkit-mask-image:repeating-linear-gradient(90deg,#000 0 3px,transparent 3px 4px),repeating-linear-gradient(0deg,#000 0 3px,transparent 3px 4px);-webkit-mask-composite:source-in;mask-image:repeating-linear-gradient(90deg,#000 0 3px,transparent 3px 4px),repeating-linear-gradient(0deg,#000 0 3px,transparent 3px 4px);mask-composite:intersect}
+.lcd-label .ln:last-child{transform:scaleX(-1)}
+.lcd-label .copy{flex:0 0 auto;font-family:"Press Start 2P",monospace;font-size:8px;letter-spacing:1px;color:#b4b4cc;line-height:1}
+/* 휴대폰: 가운데 정렬 대신 위에서부터 → 상태바 밑으로 안 파고들게 */
+@media (max-width:600px){body{justify-content:flex-start!important}.wellg{max-height:calc(var(--app-h,100dvh) - 300px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="lcd-label"><i class="ln"></i><span class="copy">© 2026 PARK HYONA</span><i class="ln"></i></div>
 <div class="win" id="win">
   <div class="tb"><span class="ttl"><svg width="18" height="18" viewBox="0 0 16 16"><use href="#i-mine"/></svg>지뢰찾기</span><button class="x" id="xBtn" aria-label="새 게임"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1L9 9M9 1L1 9" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button></div>
   <div class="menu">
@@ -677,6 +688,6 @@ $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 newGame();
 try{if(!localStorage.getItem('mines-tut'))setTimeout(tutOpen,350)}catch(e){}
 </script>
-<script src="../games/ph.js?v=6"></script>
+<script src="../games/ph.js?v=7"></script>
 </body>
 </html>
