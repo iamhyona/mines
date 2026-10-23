@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792732919";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792742503";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -186,7 +186,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .led b{position:static!important;font-weight:700!important}
 .big{font:700 30px/1 Silkscreen,monospace!important;letter-spacing:.05em}
 .list .t{font-family:Silkscreen,monospace!important;font-weight:700;font-size:12px!important}
-@media (max-width:599px){body{padding-left:4px!important;padding-right:4px!important}} /* 모바일: 좌우 여백 줄여 판 크게 */
+@media (max-width:599px){body{padding-left:4px!important;padding-right:4px!important}}
+.tabs.dvt{margin-bottom:6px}.tabs.dvt button{height:30px}
+/* 계급별 상단 색 */#win[data-lv="0"]>.tb{background:#2f9e5a}#win[data-lv="1"]>.tb{background:#4458d8}#win[data-lv="2"]>.tb{background:#7a4fd6}#win[data-lv="3"]>.tb{background:#d6334f}#win[data-lv="4"]>.tb{background:linear-gradient(90deg,#2f3b23,#4a5a2a)} /* 모바일: 좌우 여백 줄여 판 크게 */
 </style>
 </head>
 <body>
@@ -237,7 +239,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 </div></div></div>
 
 <div class="ov" id="rankOv"><div class="md"><div class="tb"><span class="ttl"><svg width="16" height="16" viewBox="0 0 16 16"><use href="#i-trophy"/></svg>최단 시간 랭킹</span></div><div class="bd">
-  <div class="tabs" id="tabs"><button data-t="0">훈련병</button><button data-t="1">이병</button><button data-t="2">상병</button><button data-t="3">병장</button><button data-t="4">특전사</button></div>
+  <div class="tabs dvt" id="dvTabs"><button data-d="m">모바일</button><button data-d="p">PC</button></div><div class="tabs" id="tabs"><button data-t="0">훈련병</button><button data-t="1">이병</button><button data-t="2">상병</button><button data-t="3">병장</button><button data-t="4">특전사</button></div>
   <div class="list" id="list"></div>
   <button class="close" data-close>✕</button>
 </div></div></div>
@@ -293,7 +295,7 @@ function newGame(){
   const L=LV[lv]; rot = L.w>L.h && isPortraitNarrow();
   W=rot?L.h:L.w; H=rot?L.w:L.h; M=L.m;
   mine=new Uint8Array(W*H); state=new Uint8Array(W*H); cnt=new Uint8Array(W*H);
-  SP=!!L.sp; fog=new Uint8Array(W*H); tb.clear(); tbAll.clear(); clearInterval(spT); moveAcc=0; tbSec=-1; $('tbar').classList.remove('on','hurry'); $('win').classList.toggle('lv4',SP);
+  SP=!!L.sp; fog=new Uint8Array(W*H); tb.clear(); tbAll.clear(); clearInterval(spT); moveAcc=0; tbSec=-1; $('tbar').classList.remove('on','hurry'); $('win').classList.toggle('lv4',SP);$('win').dataset.lv=lv;
   fxT.forEach(clearTimeout); fxT=[]; $('win').classList.remove('shake','glow');
   started=false; over=false; flags=0; opened=0; clearInterval(timer); t0=0; setPause(false,true);
   $('lvLbl').textContent=`${L.n} · ${L.w}×${L.h}`;
@@ -609,22 +611,25 @@ $('saveBtn').onclick=async()=>{
   if(!lastWin||lastWin.saved) return;
   const n=($('nameIn').value.trim()||'익명').slice(0,8); localStorage.setItem('mines-name',n);
   lastWin.saved=true; lastWin.n=n; $('saveBtn').disabled=true; $('saveBtn').textContent='…';
-  const rec={n,t:lastWin.ms,l:lastWin.lv,d:new Date().toISOString().slice(0,16).replace('T',' ')};
+  const rec={n,t:lastWin.ms,l:lastWin.lv,dv:DV,d:new Date().toISOString().slice(0,16).replace('T',' ')};
   const lr=localRanks(); lr.push(rec); localStorage.setItem('mines-ranks',JSON.stringify(lr.slice(-300)));
-  if(RANK_URL){try{await fetch(`${RANK_URL}?g=mines&a=add&n=${encodeURIComponent(n)}&t=${rec.t}&l=${rec.l}`)}catch(e){}}
+  if(RANK_URL){try{await fetch(`${RANK_URL}?g=mines&a=add&n=${encodeURIComponent(n)}&t=${rec.t}&l=${rec.l}&dv=${DV}`)}catch(e){}}
   $('saveBtn').textContent='✓'; hide('winOv'); openRank(lastWin.lv);
 };
-let rankTab=0, remote=null;
+const DV=matchMedia('(pointer:coarse)').matches?'m':'p'; // 모바일 / PC 랭킹 구분
+let rankTab=0, remote=null, rankDv=DV;
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{rankTab=+b.dataset.t;renderRank()});
+document.querySelectorAll('#dvTabs button').forEach(b=>b.onclick=()=>{rankDv=b.dataset.d;pickTab();renderRank()});
 let rankLoading=false;
-function allRanks(){const seen=new Set(),out=[];for(const r of [...(remote||[]),...localRanks()]){const k=r.n+'|'+r.t+'|'+r.l;if(!seen.has(k)){seen.add(k);out.push(r)}}return out}
+function allRanks(){const seen=new Set(),out=[];for(const r of [...(remote||[]),...localRanks()]){const k=r.n+'|'+r.t+'|'+r.l;if(!seen.has(k)){seen.add(k);out.push(r)}}return out.filter(r=>!r.dv||r.dv===rankDv)} /* 기기 구분 전 기록은 양쪽에 표시 */
 function pickTab(){const a=allRanks();if(!a.some(r=>+r.l===rankTab)){const f=LV.findIndex((_,i)=>a.some(r=>+r.l===i));if(f>=0)rankTab=f}}
 async function openRank(t){
-  rankTab=t; show('rankOv'); rankLoading=!!RANK_URL; pickTab(); renderRank();
+  rankTab=t; rankDv=DV; show('rankOv'); rankLoading=!!RANK_URL; pickTab(); renderRank();
   if(RANK_URL){ try{const r=await fetch(`${RANK_URL}?g=mines&_=${Date.now()}`,{cache:'no-store'});const j=await r.json();remote=j.top||[]}catch(e){} rankLoading=false; if(t===rankTab||!allRanks().some(r=>+r.l===rankTab))pickTab(); renderRank() }
 }
 function renderRank(){
   const all=allRanks();
+  document.querySelectorAll('#dvTabs button').forEach(b=>b.classList.toggle('on',b.dataset.d===rankDv));
   document.querySelectorAll('#tabs button').forEach(b=>{const t=+b.dataset.t,c=all.filter(r=>+r.l===t).length;b.classList.toggle('on',t===rankTab);b.textContent=LV[t].n+(c?` ${c}`:'')});
   let rows=all.filter(r=>+r.l===rankTab).sort((a,b)=>a.t-b.t);
   const me=lastWin&&lastWin.saved&&lastWin.lv===rankTab?lastWin:null;
