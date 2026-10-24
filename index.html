@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792793000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792795000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -676,11 +676,12 @@ function tutDraw(){const t=TUT[tutI];
   $('tutPrev').style.display=tutI?'':'none'; $('tutSkip').style.display=tutI<TUT.length-1?'':'none';
   $('tutNext').textContent=tutI<TUT.length-1?'다음':'시작하기';
 }
-function tutOpen(){tutI=0;tutDraw();try{$('tutNo').checked=!!localStorage.getItem('mines-tut')}catch(e){}show('tutOv')}
-function tutDone(){hide('tutOv');try{if($('tutNo').checked)localStorage.setItem('mines-tut','1');else localStorage.removeItem('mines-tut')}catch(e){}}
+function tutOpen(){tutI=0;tutDraw();$('tutNo').checked=false;try{localStorage.setItem('mines-tut','1')}catch(e){}show('tutOv')} // 처음 한 번만 자동으로 (이후엔 도움말 → 다시 보기)
+function tutDone(){hide('tutOv')}
 $('tutNext').onclick=()=>{if(tutI<TUT.length-1){tutI++;tutDraw()}else tutDone()};
 $('tutPrev').onclick=()=>{if(tutI){tutI--;tutDraw()}};
 $('tutSkip').onclick=tutDone;
+$('tutNo').onchange=()=>{if($('tutNo').checked)tutDone()}; // 다시 보지 않기 체크하면 바로 닫기
 $('spGo').onclick=()=>{sfx('ui');hide('spOv')};
 $('spHelp').onclick=e=>{e.preventDefault();hide('helpOv');show('spOv')};
 $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
@@ -688,6 +689,6 @@ $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 newGame();
 try{if(!localStorage.getItem('mines-tut'))setTimeout(tutOpen,350)}catch(e){}
 </script>
-<script src="../games/ph.js?v=7"></script>
+<script src="../games/ph.js?v=8"></script>
 </body>
 </html>
