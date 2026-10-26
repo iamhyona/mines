@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1792823000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793001824";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -251,6 +251,7 @@ html{background:#0f1418}
 
 <div class="ov" id="rankOv"><div class="md"><div class="tb"><span class="ttl"><svg width="16" height="16" viewBox="0 0 16 16"><use href="#i-trophy"/></svg>최단 시간 랭킹</span></div><div class="bd">
   <div class="tabs dvt" id="dvTabs"><button data-d="m">모바일</button><button data-d="p">PC</button></div><div class="tabs" id="tabs"><button data-t="0">훈련병</button><button data-t="1">이병</button><button data-t="2">상병</button><button data-t="3">병장</button><button data-t="4">특전사</button></div>
+  <div id="rkBar"></div>
   <div class="list" id="list"></div>
   <button class="close" data-close>✕</button>
 </div></div></div>
@@ -626,20 +627,22 @@ $('saveBtn').onclick=async()=>{
   if(!lastWin||lastWin.saved) return;
   const n=($('nameIn').value.trim()||'익명').slice(0,8); localStorage.setItem('mines-name',n);
   lastWin.saved=true; lastWin.n=n; $('saveBtn').disabled=true; $('saveBtn').textContent='…';
-  const rec={n,t:lastWin.ms,l:lastWin.lv,dv:DV,d:new Date().toISOString().slice(0,16).replace('T',' ')};
+  const rec={n,t:lastWin.ms,l:lastWin.lv,dv:DV,ts:Date.now(),d:window.phRk?phRk.now():''};
   const lr=localRanks(); lr.push(rec); localStorage.setItem('mines-ranks',JSON.stringify(lr.slice(-300)));
   if(RANK_URL){try{await fetch(`${RANK_URL}?g=mines&a=add&n=${encodeURIComponent(n)}&t=${rec.t}&l=${rec.l}&dv=${DV}`)}catch(e){}}
-  $('saveBtn').textContent='✓'; hide('winOv'); openRank(lastWin.lv);
+  $('saveBtn').textContent='✓'; hide('winOv'); openRank(lastWin.lv,{ver:window.phRk?phRk.vers('mines')[0].id:null});
 };
 const DV=matchMedia('(pointer:coarse)').matches?'m':'p'; // 모바일 / PC 랭킹 구분
 let rankTab=0, remote=null, rankDv=DV;
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{rankTab=+b.dataset.t;renderRank()});
 document.querySelectorAll('#dvTabs button').forEach(b=>b.onclick=()=>{rankDv=b.dataset.d;pickTab();renderRank()});
 let rankLoading=false;
-function allRanks(){const seen=new Set(),out=[];for(const r of [...(remote||[]),...localRanks()]){const k=r.n+'|'+r.t+'|'+r.l;if(!seen.has(k)){seen.add(k);out.push(r)}}return out.filter(r=>!r.dv||r.dv===rankDv)} /* 기기 구분 전 기록은 양쪽에 표시 */
+function allRanks(){const seen=new Set(),out=[];for(const r of [...(remote||[]),...localRanks()]){const k=r.n+'|'+r.t+'|'+r.l;if(!seen.has(k)){seen.add(k);out.push(r)}}return out.filter(r=>(!r.dv||r.dv===rankDv)&&(!window.phRk||!RSEL.ver||phRk.ver('mines',r)===RSEL.ver))} /* 기기 구분 전 기록은 양쪽에 표시 */
 function pickTab(){const a=allRanks();if(!a.some(r=>+r.l===rankTab)){const f=LV.findIndex((_,i)=>a.some(r=>+r.l===i));if(f>=0)rankTab=f}}
-async function openRank(t){
-  rankTab=t; rankDv=DV; show('rankOv'); rankLoading=!!RANK_URL; pickTab(); renderRank();
+/* 랭킹: 기기 × 난이도 × 버전 (게임:기기:난이도:버전) — 난이도·기기는 위 탭, 버전은 드롭다운 */
+let RSEL={};function rkBarInit(sel){if(window.phRk)RSEL=phRk.bar($('rkBar'),{game:'mines',sel,onChange:s=>{RSEL=s;pickTab();renderRank()}})}
+async function openRank(t,sel){
+  rkBarInit(sel||null); rankTab=t; rankDv=DV; show('rankOv'); rankLoading=!!RANK_URL; pickTab(); renderRank();
   if(RANK_URL){ try{const r=await fetch(`${RANK_URL}?g=mines&_=${Date.now()}`,{cache:'no-store'});const j=await r.json();remote=j.top||[]}catch(e){} rankLoading=false; if(t===rankTab||!allRanks().some(r=>+r.l===rankTab))pickTab(); renderRank() }
 }
 function renderRank(){
@@ -689,6 +692,6 @@ $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 newGame();
 /* 설명은 자동으로 띄우지 않음: 위쪽 '도움말' 메뉴에서 보기 */
 </script>
-<script src="../games/ph.js?v=12"></script>
+<script src="../games/ph.js?v=14"></script>
 </body>
 </html>
