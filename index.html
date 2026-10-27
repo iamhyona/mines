@@ -210,10 +210,10 @@ html{background:#0f1418}
     <button class="lv" id="lvLbl">중급 · 16×20</button>
     <div class="drop" id="drop">
       <button data-n="1">새 게임<small>F2</small></button><hr>
-      <button data-lv="0">훈련병<small>10×10 · 12</small></button>
-      <button data-lv="1">이병<small>16×20 · 50</small></button>
-      <button data-lv="2">상병<small>30×20 · 120</small></button>
-      <button data-lv="3">병장<small>30×30 · 200</small></button>
+      <button data-lv="0">훈련병<small>10×10 · 8</small></button>
+      <button data-lv="1">이병<small>16×20 · 32</small></button>
+      <button data-lv="2">상병<small>30×20 · 72</small></button>
+      <button data-lv="3">병장<small>30×30 · 126</small></button>
       <button data-lv="4">특전사<small>16×20 · 특수폭탄</small></button><hr>
       <button data-r="1">랭킹 보기</button>
     </div>
@@ -286,7 +286,7 @@ html{background:#0f1418}
 </svg>
 
 <script>
-const LV=[{n:'훈련병',w:10,h:10,m:12},{n:'이병',w:16,h:20,m:50},{n:'상병',w:30,h:20,m:120},{n:'병장',w:30,h:30,m:200},{n:'특전사',w:16,h:20,m:45,sp:1}];
+const LV=[{n:'훈련병',w:10,h:10,m:8},{n:'이병',w:16,h:20,m:32},{n:'상병',w:30,h:20,m:72},{n:'병장',w:30,h:30,m:126},{n:'특전사',w:16,h:20,m:38,sp:1}];
 const RANK_URL='https://script.google.com/macros/s/AKfycbzkdjVleobj98oyxlC77cUf5txCRiSB6D1zgRWU56pX22ElXAx9R8xFRGnV0nKAUbwC/exec';
 const $=id=>document.getElementById(id);
 const FACES={
