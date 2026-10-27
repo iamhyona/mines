@@ -355,7 +355,7 @@ function plant(safe){
   started=true; t0=performance.now();
   runTimer(); setLed('timeLed',1);
   if(SP){
-    for(let i=0;i<W*H;i++) if(!mine[i]&&cnt[i]>0&&i!==safe&&Math.random()<.02) fog[i]=1;
+    for(let i=0;i<W*H;i++) if(!mine[i]&&cnt[i]>0&&i!==safe&&Math.random()<.05) fog[i]=1;
     const ms=[];for(let i=0;i<W*H;i++) if(mine[i]) ms.push(i);
     for(let k=0;k<3&&ms.length;k++){const j=ms.splice(Math.floor(Math.random()*ms.length),1)[0];tb.set(j,{left:30000,act:false});tbAll.add(j)}
     spLast=performance.now(); spT=setInterval(spTick,200);
