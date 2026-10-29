@@ -200,9 +200,48 @@ html{background:#0f1418}
 @media (max-width:600px){body{justify-content:flex-start!important}.wellg{max-height:calc(var(--app-h,100dvh) - 300px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important}}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style id="phHead">/* 상단 헤더 통일 (2026-10-30): 무지개 줄 없이 가운데 'PARK HYONA'S 게임이름' */
+html .lcd-label .ln{display:none!important}
+html .lcd-label{justify-content:center!important;padding:12px 10px 10px!important}
+html .lcd-label .copy{font:400 9px "Silkscreen",monospace!important;letter-spacing:2px!important;color:#8b8fa8!important;-webkit-text-stroke:0!important;text-shadow:none!important;text-transform:uppercase}
+</style>
+<style id="msStartCss">/* 시작 화면 (2026-10-30): 다른 게임과 같은 구성 */
+#msStart{position:fixed;inset:0;z-index:40;background:#0b0c12;display:flex;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 40px) 20px calc(env(safe-area-inset-bottom,0px) + 16px);box-sizing:border-box;overflow:auto}
+#msStart[hidden]{display:none}
+#rankOv>.phOvH,#helpOv>.phOvH{display:none!important}
+#msStart .msHd{font:400 9px "Silkscreen",monospace;letter-spacing:2px;color:#8b8fa8;margin-bottom:12%}
+#msStart .phS-logo{width:min(300px,86vw);min-height:104px;display:flex;align-items:center;justify-content:center}
+#msStart .phS-logo svg{width:100%;height:auto;display:block}
+#msShow{display:flex;gap:6px;margin:22px 0 34px}
+#msShow i{width:34px;height:34px;border-radius:6px;display:grid;place-items:center;font:700 18px "Silkscreen",monospace;background:#2a2f3a;box-shadow:inset 2px 2px 0 #4a5161,inset -2px -2px 0 #161a22;transition:background .2s,box-shadow .2s}
+#msShow i.op{background:#141821;box-shadow:inset 0 0 0 1px #262b36}
+#msShow i svg{width:20px;height:20px}
+#msShow i:not(.op)>*{visibility:hidden}
+.msB{--b:#10b870;--t:#9ff0c6;width:300px;max-width:100%;height:52px;box-sizing:border-box;border:2px solid var(--b);border-radius:12px;background:#12142a;color:var(--t);font:400 13px "Silkscreen",monospace;letter-spacing:.2em;padding:0 0 0 .2em;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.msB.sub{--b:#3a3e66;--t:#dfe2ea;font-size:11px}
+@media (hover:hover){.msB:hover{background:color-mix(in srgb,var(--b) 16%,#12142a);box-shadow:0 0 14px color-mix(in srgb,var(--b) 40%,transparent)}}
+.msB:active{transform:translateY(1px)}
+.msRow{display:flex;gap:12px;width:300px;max-width:100%}.msRow .msB{flex:1 1 0;min-width:0}
+.msBtns{display:flex;flex-direction:column;gap:12px;align-items:center;width:100%}
+.msHow{all:unset;margin:28px auto 0;padding:6px 12px;font:400 10px/1 "Silkscreen",monospace;letter-spacing:.16em;color:#8b8fa8;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.msHow:hover{color:#dfe2ea}
+#msStart .msCr{margin-top:auto;padding-top:24px;font:400 10px/1.7 Galmuri11,sans-serif;color:rgba(200,204,220,.45);text-align:center}
+@media (prefers-reduced-motion:reduce){#msShow i{transition:none}}
+</style>
 </head>
 <body>
-<div class="lcd-label"><i class="ln"></i><span class="copy">© 2026 PARK HYONA</span><i class="ln"></i></div>
+<div id="msStart" role="dialog" aria-label="지뢰찾기 시작 화면">
+  <div class="msHd">PARK HYONA'S MINESWEEPER</div>
+  <div class="phS-logo" data-word="MINE|SWEEPER" aria-label="MINESWEEPER"></div>
+  <div id="msShow" aria-hidden="true"><i style="color:#3b8cff">1</i><i style="color:#22a35a">2</i><i><svg viewBox="0 0 16 16"><use href="#i-flag"/></svg></i><i style="color:#e8284f">3</i><i><svg viewBox="0 0 16 16"><use href="#i-mine"/></svg></i><i style="color:#3b8cff">1</i><i style="color:#8a3cf0">4</i></div>
+  <div class="msBtns">
+    <button type="button" class="msB" id="msPlay">START</button>
+    <div class="msRow"><button type="button" class="msB sub" id="msRank">RANKING</button><button type="button" class="msB sub" id="msAll">ALL GAMES</button></div>
+  </div>
+  <button type="button" class="msHow" id="msHow">HOW TO PLAY</button>
+  <div class="msCr">이 게임은 서울 마포구에 사는 박현아가 만든 비상업용 게임이에요.<br>지치고 힘들 때 잠시 머리 식히며 마음껏 즐겨 주세요.</div>
+</div>
+<div class="lcd-label"><i class="ln"></i><span class="copy">PARK HYONA'S MINESWEEPER</span><i class="ln"></i></div>
 <div class="win" id="win">
   <div class="tb"><span class="ttl"><svg width="18" height="18" viewBox="0 0 16 16"><use href="#i-mine"/></svg>지뢰찾기</span><button class="x" id="xBtn" aria-label="새 게임"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1L9 9M9 1L1 9" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button></div>
   <div class="menu">
@@ -689,6 +728,20 @@ $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 newGame();
 /* 설명은 자동으로 띄우지 않음: 위쪽 '도움말' 메뉴에서 보기 */
 </script>
-<script src="../games/ph.js?v=24"></script>
+<script src="../games/ph.js?v=25"></script>
+<script>/* 시작 화면 동작 */
+(function(){const st=document.getElementById('msStart');if(!st)return;
+  const lg=st.querySelector('.phS-logo');const fillLogo=()=>{if(window.phLogo&&!lg.firstChild)lg.innerHTML=window.phLogo('MINE|SWEEPER')};fillLogo();setTimeout(fillLogo,300);
+  const T=[...document.querySelectorAll('#msShow i')];let k=0;const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(rm)T.forEach(t=>t.classList.add('op'));else setInterval(()=>{if(st.hidden)return;if(k<T.length){T[k].classList.add('op');k++}else{T.forEach(t=>t.classList.remove('op'));k=0}},420);
+  const hide=()=>{st.hidden=true};
+  document.getElementById('msPlay').onclick=hide;
+  document.getElementById('msRank').onclick=()=>{const b=document.getElementById('rankBtn');if(b)b.click()};
+  document.getElementById('msAll').onclick=()=>{location.href='../games/'};
+  document.getElementById('msHow').onclick=()=>{const b=document.getElementById('mHelp');if(b)b.click()};
+  ['pointerdown','touchstart','keydown'].forEach(t=>st.addEventListener(t,e=>e.stopPropagation()));
+  addEventListener('keydown',e=>{if(!st.hidden&&(e.key==='Enter'||e.key===' ')&&document.activeElement===document.body){e.preventDefault();hide()}},true);
+})();
+</script>
 </body>
 </html>
