@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793490000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793500000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -845,7 +845,7 @@ var FLAG_PP='<rect x="4" y="13.3" width="8" height="1.8" rx=".9" fill="#c9cde0"/
 var M0,F0;function sym(id){return document.getElementById(id)}
 function apply(pp){document.documentElement.classList.toggle('pp',pp);var m=sym('i-mine'),f=sym('i-flag');if(m&&f){if(M0==null){M0=m.innerHTML;F0=f.innerHTML}m.innerHTML=M0; /* 지뢰는 두 모드 모두 원래 지뢰 */f.innerHTML=pp?FLAG_PP:F0}
  document.querySelectorAll('#msMode button').forEach(function(b){b.classList.toggle('on',(b.dataset.s==='pp')===pp)})}
-function init(){var pp=false;try{pp=localStorage.getItem(K)==='pp'}catch(e){}
+function init(){var pp=true;try{pp=localStorage.getItem(K)!=='cl'}catch(e){}
  var bt=document.querySelector('#msStart .msBtns');if(bt&&!sym('msMode')){var d=document.createElement('div');d.id='msMode';d.innerHTML='<button type="button" data-s="cl">CLASSIC</button><button type="button" data-s="pp">PANGPANG</button>';bt.insertBefore(d,bt.firstChild);
   d.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var v=b.dataset.s==='pp';try{localStorage.setItem(K,v?'pp':'cl')}catch(e){}apply(v)})}
  apply(pp)}
