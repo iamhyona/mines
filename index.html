@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793440000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793490000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -232,7 +232,96 @@ html .lcd-label .copy{font:400 9px "Silkscreen",monospace!important;letter-spaci
 @media (prefers-reduced-motion:reduce){#msShow i{transition:none}}
 </style>
 
-</head>
+<style id="ppSkin">/* 팡팡이 모드 (2026-10-30 시안) — html.pp 일 때만 */
+#msMode{display:flex;width:300px;max-width:100%;height:40px;border:2px solid #2c3046;border-radius:12px;padding:3px;gap:3px;box-sizing:border-box;margin:0 0 4px}
+#msMode button{all:unset;flex:1;display:grid;place-items:center;border-radius:8px;font:400 10px "Silkscreen",monospace;letter-spacing:.16em;color:#7d8199;cursor:pointer}
+#msMode button.on{background:#1d2140;color:#fff;box-shadow:inset 0 0 0 1.5px #ff6ec7}
+html.pp body{background:#17171f}
+html.pp .win{background:#101016;border-radius:12px;padding:8px;box-shadow:none}
+html.pp .tb{display:none}
+html.pp .menu{padding:2px 2px 8px;gap:6px}
+html.pp .menu>button{border-radius:999px;padding:5px 11px;background:#1a1d33;color:#b9bdd6;font-family:Galmuri11,sans-serif;font-weight:400}
+html.pp .menu>button.lv{margin-left:auto;background:transparent;color:#ffd84d}
+html.pp .hd{background:#0a0c1d;border-radius:10px;padding:8px 10px}
+html.pp .led{background:transparent!important;box-shadow:none!important;padding:14px 8px 2px!important;color:#fff}
+html.pp .led::before{position:absolute;left:8px;top:2px;font:400 8px "Silkscreen",monospace;letter-spacing:.14em;color:#7d8199}
+html.pp .hd>.led:first-child::before{content:'MINES'}
+html.pp .hd>.led:last-child::before{content:'TIME';}
+html.pp .led b{position:static!important;color:#fff!important;text-shadow:0 0 8px rgba(255,110,199,.45)!important}
+html.pp #face{background:transparent!important;border:0!important;width:48px;height:48px}
+html.pp #face svg{width:40px;height:40px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.35))}
+html.pp #face svg>circle:first-child{fill:#ff6ec7;stroke:#7a1f55}
+html.pp .wellg{background:#0a0c1d;box-shadow:none;border-radius:10px}
+html.pp .g{gap:2px}
+html.pp .g i.u{background:linear-gradient(180deg,#5260c9 0%,#3a4499 100%);border:0!important;border-radius:calc(var(--c)*.24);box-shadow:inset 0 calc(var(--c)*.08) 0 rgba(255,255,255,.26),inset 0 calc(var(--c)*-.08) 0 rgba(10,10,60,.35)}
+html.pp .g i.u.press{background:#1b1f3d;box-shadow:none}
+html.pp .g i.o{background:#151935;box-shadow:none;border-radius:calc(var(--c)*.2);font-family:"Silkscreen",monospace;font-weight:700}
+html.pp .g i.boom{background:radial-gradient(circle,#ff8aa0,#e8284f)!important}
+html.pp{--n1:#4aa3ff;--n2:#2fd07a;--n3:#ff4d6d;--n4:#a06bff;--n5:#ffb020;--n6:#2ad4d4;--n7:#ff7ac8;--n8:#e9ecf5}
+html.pp .ft .fb{background:#12142a!important;border:2px solid #2c3046!important;border-radius:12px;font-family:Galmuri11,sans-serif;font-weight:400;color:#dfe2ef}
+html.pp .ft .fb.on{border-color:#ff6ec7!important;color:#ffb3e1}
+html.pp #msShow i{border-radius:9px;background:linear-gradient(180deg,#5260c9,#3a4499);box-shadow:inset 0 3px 0 rgba(255,255,255,.3),inset 0 -3px 0 rgba(10,10,60,.35)}
+html.pp #msShow i.op{background:#151935;box-shadow:none}
+</style><style id="ppSkin2">/* 팡팡이 모드 v2: 난도별 얼굴색 · 다른 게임과 같은 버튼 */
+html.pp{--fc:#4aa3ff;--fs:#1d4f8a}
+html.pp[data-lv="0"]{--fc:#2fd07a;--fs:#126b3c}
+html.pp[data-lv="1"]{--fc:#4aa3ff;--fs:#1d4f8a}
+html.pp[data-lv="2"]{--fc:#ffd43b;--fs:#8a6a00}
+html.pp[data-lv="3"]{--fc:#ff9a2e;--fs:#8a4300}
+html.pp[data-lv="4"]{--fc:#a06bff;--fs:#4a2596}
+html.pp #face svg>circle:first-child{fill:var(--fc)!important;stroke:var(--fs)!important}
+html.pp .led b{text-shadow:0 0 8px color-mix(in srgb,var(--fc) 55%,transparent)!important}
+html.pp .menu>button:not(.lv){display:none}
+html.pp .menu{align-items:center;padding:0 2px 8px}
+html.pp .menu>button.lv{margin-left:0;padding:0 2px;background:transparent;border-radius:0;font:400 10px "Silkscreen",Galmuri11,monospace;letter-spacing:.08em;color:var(--fc);pointer-events:none}
+#ppIc{display:none}
+html.pp #ppIc{display:flex;gap:6px;margin-left:auto}
+#ppIc button{all:unset;box-sizing:border-box;width:38px;height:38px;border-radius:10px;background:#12142a;border:1.5px solid #2c3046;display:grid;place-items:center;cursor:pointer}
+#ppIc button svg{width:20px;height:18px;fill:none;stroke:#c9cde0;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#ppIc button.off svg{stroke:#5d6178}
+html.pp #pauseBtn{display:none}
+html.pp .ft .fb{height:52px;border-radius:12px!important;background:#12142a!important;border:2px solid #9a9fa6!important;font-size:0!important;color:#dfe2e6;gap:0}
+html.pp .ft .fb .fi{display:none}
+html.pp .ft .fb::after{font:400 11px "Silkscreen",monospace;letter-spacing:.2em;padding-left:.2em}
+html.pp #flagBtn::after{content:'FLAG MODE'}
+html.pp #rankBtn::after{content:'RANKING'}
+html.pp #flagBtn{border-color:#10b870!important;color:#9ff0c6}
+html.pp #flagBtn.on{background:#10b870!important;color:#06261a}
+</style><style id="ppEmboss">/* 팡팡이 모드 v3: 누르는 칸 엠보 강하게 */
+html.pp .g i.u{background:linear-gradient(160deg,#6a78e0 0%,#4a57c2 45%,#3a44a0 100%)!important;box-shadow:inset calc(var(--c)*.07) calc(var(--c)*.09) 0 rgba(255,255,255,.33),inset calc(var(--c)*-.07) calc(var(--c)*-.1) 0 rgba(12,14,60,.55),0 calc(var(--c)*.06) 0 rgba(0,0,0,.35)!important}
+html.pp .g i.u::after{content:'';position:absolute;left:18%;top:14%;width:28%;height:16%;border-radius:999px;background:rgba(255,255,255,.35)}
+html.pp .g i.u{position:relative}
+html.pp .g i.u.press{background:#1b1f3d!important;box-shadow:inset 0 2px 3px rgba(0,0,0,.5)!important}
+html.pp .g i.u.press::after{display:none}
+html.pp #msShow i{background:linear-gradient(160deg,#6a78e0,#4a57c2 45%,#3a44a0);box-shadow:inset 3px 4px 0 rgba(255,255,255,.38),inset -3px -4px 0 rgba(12,14,60,.55),0 3px 0 rgba(0,0,0,.35)}
+html.pp #msShow i.op{background:#151935;box-shadow:none}
+</style><style id="noCredit">/* 게임 화면 하단 문구 빼기 (다른 게임과 같게, 두 모드 모두) */body>.credit{display:none!important}</style><style id="noFoot">/* 팡팡이 모드: 하단 버튼 없앰 (깃발=길게 누르기·오른쪽 클릭, 랭킹=설정 메뉴) */html.pp #ft{display:none!important}html.pp .wellg{max-height:calc(var(--app-h,100dvh) - 210px)!important}</style><style id="ppLvTile">/* 누르는 칸 색도 난도별 */
+html.pp{--t1:#6a78e0;--t2:#4a57c2;--t3:#3a44a0}
+html.pp[data-lv="0"]{--t1:#68c58e;--t2:#419c6a;--t3:#317a52}
+html.pp[data-lv="1"]{--t1:#727ed2;--t2:#525db4;--t3:#404a94}
+html.pp[data-lv="2"]{--t1:#e0c46c;--t2:#c29f38;--t3:#9f7f25}
+html.pp[data-lv="3"]{--t1:#ea9e68;--t2:#ce783e;--t3:#aa5c2a}
+html.pp[data-lv="4"]{--t1:#a286dd;--t2:#7e60c2;--t3:#6145a0}
+html.pp .g i.u,html.pp #msShow i:not(.op){background:linear-gradient(160deg,var(--t1) 0%,var(--t2) 45%,var(--t3) 100%)!important}
+</style><style id="ppHudCss">/* 팡팡이 모드 v5: 상단을 다른 게임과 같은 HUD 한 줄로 · 틀은 화면 아래까지 · 판은 남은 공간 세로 가운데 */
+html.pp body{padding-top:calc(env(safe-area-inset-top,0px) + 4px)!important;display:flex!important;flex-direction:column!important;height:var(--app-h,100dvh)!important;box-sizing:border-box;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 4px)!important}
+html.pp .win{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;background:#0a0c1d!important;border:8px solid #101016;border-radius:12px!important;padding:8px!important;box-sizing:border-box;width:100%;max-width:560px;margin:0 auto;position:relative}
+html.pp .menu{position:absolute!important;left:0;right:0;top:52px;height:0;padding:0!important;z-index:30}
+html.pp #ppIc,html.pp .menu>button{display:none!important}
+html.pp .hd{display:none!important}
+#ppHud{display:none}
+html.pp #ppHud{display:flex;gap:4px;height:46px;flex:0 0 auto}
+#ppHud .bx{box-sizing:border-box;border:2px solid #24263c;border-radius:12px;background:#0d0f1f;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7px 2px;flex:1 1 0;min-width:0}
+#ppHud .bx i{font:400 7px "Silkscreen",monospace;font-style:normal;letter-spacing:.08em;color:#8b8fa8;line-height:1}
+#ppHud .bx b{font:400 19px "Jersey 15","Silkscreen",sans-serif;color:#fff;line-height:1;letter-spacing:.02em}
+#ppHud .bx.lv b{font:400 11px Galmuri11,sans-serif;color:var(--fc);padding-bottom:2px}
+#ppHud button{all:unset;box-sizing:border-box;flex:0 0 46px;height:46px;border:2px solid #24263c;border-radius:12px;background:#0d0f1f;display:grid;place-items:center;cursor:pointer}
+#ppHud button svg{width:22px;height:20px;fill:none;stroke:#dfe2ea;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#ppHud button.off svg{stroke:#5d6178}
+#ppHud #ppFace svg{width:30px;height:30px;stroke:none}
+html.pp #well{flex:1 1 auto;min-height:0;width:100%;max-height:none!important;background:transparent!important;padding:0!important;margin-top:6px;overflow:auto;display:grid!important;place-items:center;box-sizing:border-box}
+#ppHud #ppFace svg>circle:first-child{fill:var(--fc)!important;stroke:var(--fs)!important}
+</style></head>
 <body>
 <div id="msStart" role="dialog" aria-label="지뢰찾기 시작 화면">
   <div class="msHd">PARK HYONA'S MINESWEEPER</div>
@@ -461,9 +550,9 @@ function boomFx(cx,cy){
   let cv=$('fx'); if(!cv){cv=document.createElement('canvas');cv.id='fx';cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55';document.body.appendChild(cv)}
   const dpr=Math.min(devicePixelRatio||1,2), VW=innerWidth, VH=innerHeight; cv.width=VW*dpr; cv.height=VH*dpr;
   const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
-  const cols=['#fff6c8','#ffd43b','#ff922b','#ff4d5e','#e8590c'], P=[];
+  const PPM=document.documentElement.classList.contains('pp'), cols=PPM?['#ff6ec7','#ffd43b','#4aa3ff','#2fd07a','#a06bff']:['#fff6c8','#ffd43b','#ff922b','#ff4d5e','#e8590c'], P=[]; /* 팡팡이 모드: 알록달록 젤리 조각 */
   for(let k=0;k<52;k++){const a=Math.random()*Math.PI*2,v=2.5+Math.random()*7.5;P.push({x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v-2.5,r:1.4+Math.random()*3.4,c:cols[k%5],l:1,s:0})}
-  for(let k=0;k<16;k++){const a=Math.random()*Math.PI*2,v=.4+Math.random()*1.6;P.push({x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v-.7,r:7+Math.random()*9,c:'#8a8f99',l:1,s:1})}
+  for(let k=0;k<16;k++){const a=Math.random()*Math.PI*2,v=.4+Math.random()*1.6;P.push({x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v-.7,r:7+Math.random()*9,c:PPM?'#ffd6ec':'#8a8f99',l:1,s:1})}
   const t0=performance.now();
   (function f(t){const e=(t-t0)/1000; x.clearRect(0,0,VW,VH);
     if(e<.14){const g2=x.createRadialGradient(cx,cy,0,cx,cy,110);g2.addColorStop(0,`rgba(255,250,225,${1-e/.14})`);g2.addColorStop(1,'rgba(255,120,40,0)');x.fillStyle=g2;x.fillRect(cx-110,cy-110,220,220)}
@@ -750,5 +839,54 @@ newGame();
   addEventListener('keydown',e=>{if(!st.hidden&&(e.key==='Enter'||e.key===' ')&&document.activeElement===document.body){e.preventDefault();hide()}},true);
 })();
 </script>
-</body>
+<script id="ppSkinJs">/* 팡팡이 모드 시안: 시작 화면에서 CLASSIC | PANGPANG 선택 (이 기기에 저장) */
+(function(){var K='mines-skin';var MINE_PP='<ellipse cx="8" cy="9.2" rx="6.3" ry="5.7" fill="#ff4d6d"/><ellipse cx="8" cy="6.6" rx="4" ry="1.8" fill="#ffb3c1" opacity=".55"/><circle cx="5.2" cy="6.4" r="1" fill="#fff"/><path d="M5 8.2l2 .7M11 8.2l-2 .7" stroke="#3a0d1c" stroke-width=".9" stroke-linecap="round"/><circle cx="6.3" cy="10" r=".95" fill="#3a0d1c"/><circle cx="9.7" cy="10" r=".95" fill="#3a0d1c"/><path d="M8 3.6Q8.6 1.8 10.4 1.9" stroke="#ffd43b" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="10.7" cy="1.9" r="1" fill="#ffd43b"/>';
+var FLAG_PP='<rect x="4" y="13.3" width="8" height="1.8" rx=".9" fill="#c9cde0"/><rect x="6.2" y="2" width="1.6" height="11.6" rx=".8" fill="#c9cde0"/><path d="M7.8 2.1c2.8 0 5.6 1 6.4 3-1 2-3.6 3-6.4 3Z" fill="#7cd65a"/><circle cx="10" cy="4.8" r=".6" fill="#1d3a12"/><circle cx="12" cy="5" r=".6" fill="#1d3a12"/>';
+var M0,F0;function sym(id){return document.getElementById(id)}
+function apply(pp){document.documentElement.classList.toggle('pp',pp);var m=sym('i-mine'),f=sym('i-flag');if(m&&f){if(M0==null){M0=m.innerHTML;F0=f.innerHTML}m.innerHTML=M0; /* 지뢰는 두 모드 모두 원래 지뢰 */f.innerHTML=pp?FLAG_PP:F0}
+ document.querySelectorAll('#msMode button').forEach(function(b){b.classList.toggle('on',(b.dataset.s==='pp')===pp)})}
+function init(){var pp=false;try{pp=localStorage.getItem(K)==='pp'}catch(e){}
+ var bt=document.querySelector('#msStart .msBtns');if(bt&&!sym('msMode')){var d=document.createElement('div');d.id='msMode';d.innerHTML='<button type="button" data-s="cl">CLASSIC</button><button type="button" data-s="pp">PANGPANG</button>';bt.insertBefore(d,bt.firstChild);
+  d.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var v=b.dataset.s==='pp';try{localStorage.setItem(K,v?'pp':'cl')}catch(e){}apply(v)})}
+ apply(pp)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script><script id="ppSkinJs2">(function(){var N=['훈련병','이병','상병','병장','특전사'];
+function lv(){var t=(document.getElementById('lvLbl')||{}).textContent||'';var i=N.findIndex(function(n){return t.indexOf(n+' ')===0||t===n});document.documentElement.setAttribute('data-lv',i<0?1:i)}
+function ic(){var m=document.querySelector('.menu');if(!m||document.getElementById('ppIc'))return;var d=document.createElement('div');d.id='ppIc';
+d.innerHTML='<button type="button" id="ppHelp" aria-label="도움말"><svg viewBox="0 0 22 20"><circle cx="11" cy="10" r="8"/><path d="M8.6 7.6a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.6M11 14.6v.2"/></svg></button><button type="button" id="ppSet" aria-label="난이도"><svg viewBox="0 0 22 20"><path d="M11 4 A6 6 0 1 1 10.99 4 M11 7.5 A2.5 2.5 0 1 1 10.99 7.5 M11 1.5 V4 M11 16 V18.5 M2.5 10 H5 M17 10 H19.5 M5 4 L6.8 5.8 M15.2 14.2 L17 16 M5 16 L6.8 14.2 M15.2 5.8 L17 4"/></svg></button><button type="button" id="ppSnd" aria-label="소리"><svg viewBox="0 0 22 20"><path d="M2 7 H6 L11 3 V17 L6 13 H2 Z M14 7 Q16 10 14 13 M17 4 Q21 10 17 16"/></svg></button><button type="button" id="ppPz" aria-label="일시정지"><svg viewBox="0 0 22 20"><path d="M8 4 V16 M14 4 V16"/></svg></button>';
+m.insertBefore(d,document.getElementById('drop'));
+var c=function(id){return function(e){e.stopPropagation();document.getElementById(id).click();sync()}};
+document.getElementById('ppHelp').onclick=c('mHelp');document.getElementById('ppSet').onclick=c('mGame');document.getElementById('ppSnd').onclick=c('mSnd');document.getElementById('ppPz').onclick=c('pauseBtn')}
+function sync(){var s=document.getElementById('mSnd'),b=document.getElementById('ppSnd');if(s&&b)b.classList.toggle('off',/끔/.test(s.textContent))}
+function init(){ic();lv();sync();var l=document.getElementById('lvLbl');if(l)new MutationObserver(lv).observe(l,{childList:true,characterData:true,subtree:true});var s=document.getElementById('mSnd');if(s)new MutationObserver(sync).observe(s,{childList:true,subtree:true})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script><script id="ppHudJs">(function(){
+function q(id){return document.getElementById(id)}
+function build(){var w=q('win');if(!w||q('ppHud'))return;var h=document.createElement('div');h.id='ppHud';
+h.innerHTML='<button type="button" id="ppFace" aria-label="새 게임"></button><div class="bx lv"><i>LEVEL</i><b id="ppLv"></b></div><div class="bx"><i>MINES</i><b id="ppM">000</b></div><div class="bx"><i>TIME</i><b id="ppT">000</b></div><button type="button" id="ppSet2" aria-label="설정"><svg viewBox="0 0 22 20"><path d="M11 4 A6 6 0 1 1 10.99 4 M11 7.5 A2.5 2.5 0 1 1 10.99 7.5 M11 1.5 V4 M11 16 V18.5 M2.5 10 H5 M17 10 H19.5 M5 4 L6.8 5.8 M15.2 14.2 L17 16 M5 16 L6.8 14.2 M15.2 5.8 L17 4"/></svg></button><button type="button" id="ppSnd2" aria-label="소리"><svg viewBox="0 0 22 20"><path d="M2 7 H6 L11 3 V17 L6 13 H2 Z M14 7 Q16 10 14 13 M17 4 Q21 10 17 16"/></svg></button><button type="button" id="ppPz2" aria-label="일시정지"><svg viewBox="0 0 22 20"><path d="M8 4 V16 M14 4 V16"/></svg></button>';
+w.insertBefore(h,w.firstChild);
+var c=function(id){return function(e){e.stopPropagation();q(id).click();sync()}};
+q('ppFace').onclick=c('face');q('ppSet2').onclick=c('mGame');q('ppSnd2').onclick=c('mSnd');q('ppPz2').onclick=c('pauseBtn');sync()}
+function sync(){var f=q('face'),pf=q('ppFace');if(f&&pf)pf.innerHTML=f.innerHTML;var m=q('mineLed'),t=q('timeLed');if(m&&q('ppM'))q('ppM').textContent=m.textContent;if(t&&q('ppT'))q('ppT').textContent=t.textContent;
+ var l=q('lvLbl');if(l&&q('ppLv'))q('ppLv').textContent=(l.textContent.split('·')[0]||'').trim();var s=q('mSnd'),b=q('ppSnd2');if(s&&b)b.classList.toggle('off',/끔/.test(s.textContent))}
+function init(){build();['face','mineLed','timeLed','lvLbl','mSnd'].forEach(function(id){var e=q(id);if(e)new MutationObserver(sync).observe(e,{childList:true,characterData:true,subtree:true,attributes:true})});sync()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script><script id="ppSfx">/* 팡팡이 모드 효과음 (2026-10-30): 클래식과 다르게 귀엽게 · 지뢰 = 뿅 터지는 소리 · 성공 = 신나는 실로폰 */
+(function(){var S0=window.sfx,B0=window.beep,M0=window.boomSnd;if(!S0||!B0||!M0)return;
+function pp(){return document.documentElement.classList.contains('pp')}
+function T(f1,f2,d,type,v,dl){try{AC();var t=ac.currentTime+(dl||0),o=ac.createOscillator(),g=ac.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(Math.max(30,f2),t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.03)}catch(e){}}
+var last=0;
+window.sfx=function(k,n){if(!pp())return S0(k,n);if(!sndOn)return;var now=performance.now();if(k==='open'&&now-last<35)return;last=now;
+ if(k==='open'){T(520,1180,.07,'sine',.16);T(1180,1500,.04,'triangle',.05,.05);if(n>6)[1047,1319,1568,2093,2637].forEach(function(f,i){T(f,f*1.02,.14,'triangle',.06,.06+i*.05)})}
+ else if(k==='flag'){T(420,980,.09,'triangle',.12);T(980,760,.08,'sine',.08,.08)}
+ else if(k==='unflag'){T(900,380,.12,'sine',.1)}
+ else if(k==='ui'){T(700,1100,.05,'sine',.1)}
+ else S0(k,n)};
+window.boomSnd=function(){if(!pp())return M0();if(!sndOn)return;
+ /* 뿅! 팡팡이 풍선 터지는 소리 + 띠요옹 */
+ try{AC();var t=ac.currentTime,n=ac.sampleRate*.18|0,buf=ac.createBuffer(1,n,ac.sampleRate),d=buf.getChannelData(0);for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);
+  var src=ac.createBufferSource(),bp=ac.createBiquadFilter(),g=ac.createGain();src.buffer=buf;bp.type='bandpass';bp.frequency.value=2200;bp.Q.value=.8;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.18);src.connect(bp).connect(g).connect(ac.destination);src.start(t)}catch(e){}
+ T(880,160,.45,'triangle',.16,.04);T(330,120,.5,'sine',.12,.06)};
+window.beep=function(k){if(!pp())return B0(k);if(!sndOn)return;
+ if(k==='win'){[[784,0],[988,.08],[1175,.16],[1568,.24],[1319,.36],[1568,.44],[2093,.52]].forEach(function(a){T(a[0],a[0]*1.01,.18,'triangle',.11,a[1]);T(a[0]*2,a[0]*2,.08,'sine',.03,a[1])});[2637,3136,3520].forEach(function(f,i){T(f,f*1.05,.1,'sine',.04,.7+i*.06)})}
+ else{ /* 히잉… 귀여운 실패음: 와-와-와앙 */
+  [[494,0],[466,.22],[440,.44]].forEach(function(a){T(a[0],a[0]*.97,.2,'triangle',.11,a[1])});T(415,300,.6,'triangle',.11,.66)}};
+})();</script></body>
 </html>
