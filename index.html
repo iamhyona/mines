@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793500000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793510000";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -321,6 +321,21 @@ html.pp #ppHud{display:flex;gap:4px;height:46px;flex:0 0 auto}
 #ppHud #ppFace svg{width:30px;height:30px;stroke:none}
 html.pp #well{flex:1 1 auto;min-height:0;width:100%;max-height:none!important;background:transparent!important;padding:0!important;margin-top:6px;overflow:auto;display:grid!important;place-items:center;box-sizing:border-box}
 #ppHud #ppFace svg>circle:first-child{fill:var(--fc)!important;stroke:var(--fs)!important}
+</style><style id="msLvCss">/* 시작: PANGPANG PLAY · CLASSIC PLAY → 난도 고르기 (다른 게임 모드 선택 화면과 같은 모양) */
+#msMode,#msPlay{display:none!important}
+#msLv{position:fixed;inset:0;z-index:45;background:#17171f;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 4px calc(env(safe-area-inset-bottom,0px) + 4px);box-sizing:border-box}
+#msLv[hidden]{display:none}
+#msLv .msHd{flex:0 0 37px;display:flex;align-items:center;justify-content:center;font:400 9px "Silkscreen",monospace;letter-spacing:2px;color:#8b8fa8;padding-top:2px}
+#msLv .bz{flex:1 1 auto;min-height:0;background:#101016;border-radius:10px;padding:8px;box-sizing:border-box;display:flex}
+#msLv .sc{flex:1 1 auto;background:#0a0c1d;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:0 20px}
+#msLv h2{margin:0 0 14px;font:400 20px "Silkscreen",monospace;letter-spacing:.2em;padding-left:.2em;color:#fff;text-shadow:0 0 6px rgba(255,255,255,.7),0 0 18px rgba(170,190,255,.45)}
+#msLv h2 small{display:block;text-align:center;font-size:9px;letter-spacing:.3em;color:#8b8fa8;text-shadow:none;margin-top:8px}
+#msLv .lb{all:unset;box-sizing:border-box;width:300px;max-width:100%;height:52px;border:2px solid var(--c);border-radius:12px;background:#12142a;display:flex;align-items:center;justify-content:space-between;padding:0 18px;cursor:pointer;color:var(--c)}
+#msLv .lb b{font:400 15px Galmuri11,sans-serif}
+#msLv .lb span{font:400 9px "Silkscreen",monospace;letter-spacing:.1em;color:color-mix(in srgb,var(--c) 75%,#fff)}
+#msLv .lb.cur{background:color-mix(in srgb,var(--c) 18%,#12142a);box-shadow:0 0 14px color-mix(in srgb,var(--c) 45%,transparent)}
+@media (hover:hover){#msLv .lb:hover{background:color-mix(in srgb,var(--c) 14%,#12142a)}}
+#msLv .x{all:unset;margin-top:18px;width:40px;height:40px;display:grid;place-items:center;color:#c9cde0;font-size:22px;cursor:pointer}
 </style></head>
 <body>
 <div id="msStart" role="dialog" aria-label="지뢰찾기 시작 화면">
@@ -888,5 +903,20 @@ window.beep=function(k){if(!pp())return B0(k);if(!sndOn)return;
  if(k==='win'){[[784,0],[988,.08],[1175,.16],[1568,.24],[1319,.36],[1568,.44],[2093,.52]].forEach(function(a){T(a[0],a[0]*1.01,.18,'triangle',.11,a[1]);T(a[0]*2,a[0]*2,.08,'sine',.03,a[1])});[2637,3136,3520].forEach(function(f,i){T(f,f*1.05,.1,'sine',.04,.7+i*.06)})}
  else{ /* 히잉… 귀여운 실패음: 와-와-와앙 */
   [[494,0],[466,.22],[440,.44]].forEach(function(a){T(a[0],a[0]*.97,.2,'triangle',.11,a[1])});T(415,300,.6,'triangle',.11,.66)}};
-})();</script></body>
+})();</script><script id="msLvJs">(function(){var LVN=[['훈련병','10×10 · 8'],['이병','16×20 · 32'],['상병','30×20 · 72'],['병장','30×30 · 126'],['특전사','16×20 · SPECIAL']],COL=['#2fd07a','#4aa3ff','#ffd43b','#ff9a2e','#a06bff'];
+function q(id){return document.getElementById(id)}
+function init(){var st=q('msStart'),bt=st&&st.querySelector('.msBtns');if(!bt||q('msPP'))return;
+ var a=document.createElement('button');a.type='button';a.className='msB';a.id='msPP';a.textContent='PANGPANG PLAY';
+ var b=document.createElement('button');b.type='button';b.className='msB';b.id='msCL';b.textContent='CLASSIC PLAY';
+ bt.insertBefore(b,bt.firstChild);bt.insertBefore(a,bt.firstChild);
+ var o=document.createElement('div');o.id='msLv';o.hidden=true;o.setAttribute('role','dialog');o.setAttribute('aria-label','난도 고르기');
+ o.innerHTML='<div class="msHd">PARK HYONA\'S MINESWEEPER</div><div class="bz"><div class="sc"><h2>MINESWEEPER<small id="msLvM">PANGPANG</small></h2>'+LVN.map(function(l,i){return '<button type="button" class="lb" data-l="'+i+'" style="--c:'+COL[i]+'"><b>'+l[0]+'</b><span>'+l[1]+'</span></button>'}).join('')+'<button type="button" class="x" aria-label="닫기">✕</button></div></div>';
+ document.body.appendChild(o);
+ function open(pp){try{localStorage.setItem('mines-skin',pp?'pp':'cl')}catch(e){}var m=q('msMode');if(m){var t=m.querySelector('[data-s="'+(pp?'pp':'cl')+'"]');t&&t.click()}
+  q('msLvM').textContent=pp?'PANGPANG':'CLASSIC';var cur=0;try{cur=+(localStorage.getItem('mines-lv')||1)}catch(e){}
+  o.querySelectorAll('.lb').forEach(function(x){x.classList.toggle('cur',+x.dataset.l===cur)});o.hidden=false}
+ a.onclick=function(){open(true)};b.onclick=function(){open(false)};
+ o.querySelector('.x').onclick=function(){o.hidden=true};
+ o.addEventListener('click',function(e){var x=e.target.closest('.lb');if(!x)return;var d=document.querySelector('#drop [data-lv="'+x.dataset.l+'"]');if(d)d.click();o.hidden=true;q('msPlay').click()})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else setTimeout(init,0)})();</script></body>
 </html>
