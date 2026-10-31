@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793421309";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793426313";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -450,7 +450,12 @@ html.pp #rankOv #tabs.lvsq>.phSegK{display:none!important}
 html.pp #rankOv #tabs.lvsq>button{all:unset;flex:0 0 auto!important;width:44px!important;height:32px!important;box-sizing:border-box;border-radius:8px!important;border:2px solid var(--lc)!important;color:var(--lc)!important;display:grid!important;place-items:center;font:400 13px Galmuri11,sans-serif!important;cursor:pointer;background:transparent!important;padding:0!important}
 html.pp #rankOv #tabs.lvsq>button.on{background:var(--lc)!important;color:#111!important}
 html.pp #rankOv #tabs.lvsq>button[data-t="0"]{--lc:#4aa3ff}html.pp #rankOv #tabs.lvsq>button[data-t="1"]{--lc:#2fd07a}html.pp #rankOv #tabs.lvsq>button[data-t="2"]{--lc:#ffd43b}html.pp #rankOv #tabs.lvsq>button[data-t="3"]{--lc:#ff5a6a}html.pp #rankOv #tabs.lvsq>button[data-t="4"]{--lc:#a06bff}
-</style><style id="msUi3Css">/* 2026-10-31: 랭킹 = 다른 게임과 동일(제목 17px · 알약 탭 · 목록 글꼴) / 시작 모드 토글 / 설정 창 */
+</style><style id="msUi3Css">#msStart .msHow{margin-top:18px!important}
+#msStart .phS-logo{height:auto!important;margin:0!important}#msStart #msShow{margin-top:26px!important;height:auto!important} /* 타이틀-그림 간격 통일 */
+html body #msStart .phS-logo svg{width:var(--lw,226px)!important;height:auto!important;max-width:86vw!important} /* 타이틀 크기 다른 게임과 같은 덩어리감 */
+#msShow i{display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;text-align:center!important;padding:0 0 2px!important;box-sizing:border-box}#msShow i svg{transform:translateY(1px)}#msShow i:not(.op)>*{visibility:visible!important}#msShow i svg{display:block;margin:0 auto} /* 시작 화면 타일: 숫자 가운데 · 깃발·폭탄도 항상 보이게 (2026-10-31) */
+body:has(#msStart:not([hidden])) .lcd-label,body:has(#msLv:not([hidden])) .lcd-label{visibility:hidden!important} /* 시작 화면에서 게임 이름 두 줄로 겹치던 문제 */
+/* 2026-10-31: 랭킹 = 다른 게임과 동일(제목 17px · 알약 탭 · 목록 글꼴) / 시작 모드 토글 / 설정 창 */
 .phSet{position:fixed;inset:0;z-index:99997;display:flex;align-items:center;justify-content:center;background:rgba(8,9,12,.88);padding:16px;box-sizing:border-box}
 .phSet-c{width:min(340px,100%);max-height:100%;overflow:auto;background:#0b0c1a;border:2px solid #23253a;border-radius:18px;padding:20px 18px 18px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;color:#e9eaf5;font-family:Galmuri11,"NeoDunggeunmo",sans-serif}
 .phSet-h{text-align:center;font:400 20px "Silkscreen",monospace;letter-spacing:.15em;color:#fff;margin-bottom:6px}
@@ -1020,7 +1025,7 @@ $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 newGame();
 /* 설명은 자동으로 띄우지 않음: 위쪽 '도움말' 메뉴에서 보기 */
 </script>
-<script src="../games/ph.js?v=38"></script>
+<script src="../games/ph.js?v=39"></script>
 <script>/* 시작 화면 동작 */
 (function(){const st=document.getElementById('msStart');if(!st)return;
   const lg=st.querySelector('.phS-logo');const fillLogo=()=>{if(window.phLogo&&!lg.firstChild)lg.innerHTML=window.phLogo('MINE|SWEEPER')};fillLogo();setTimeout(fillLogo,300);
@@ -1046,7 +1051,7 @@ var M0,F0;function sym(id){return document.getElementById(id)}
 function apply(pp){document.documentElement.classList.toggle('pp',pp);var m=sym('i-mine'),f=sym('i-flag');if(m&&f){if(M0==null){M0=m.innerHTML;F0=f.innerHTML}m.innerHTML=M0; /* 지뢰는 두 모드 모두 원래 지뢰 */f.innerHTML=pp?FLAG_PP:F0}
  document.querySelectorAll('#msMode button').forEach(function(b){b.classList.toggle('on',(b.dataset.s==='pp')===pp)})}
 function init(){var pp=true;try{pp=localStorage.getItem(K)!=='cl'}catch(e){}
- var bt=document.querySelector('#msStart .msBtns');if(bt&&!sym('msMode')){var d=document.createElement('div');d.id='msMode';d.className='ppTg phSeg';d.innerHTML='<button type="button" data-s="cl">CLASSIC</button><button type="button" data-s="pp">PANGPANG</button>';bt.insertBefore(d,bt.firstChild);
+ var bt=document.querySelector('#msStart .msBtns');if(bt&&!sym('msMode')){var d=document.createElement('div');d.id='msMode';d.className='ppTg phSeg';d.innerHTML='<button type="button" data-s="pp">PANGPANG</button><button type="button" data-s="cl">CLASSIC</button>';bt.insertBefore(d,bt.firstChild);
   d.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var v=b.dataset.s==='pp';try{localStorage.setItem(K,v?'pp':'cl')}catch(e){}apply(v)})}
  apply(pp);setTimeout(function(){window.phSeg&&phSeg()},300)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();</script><script id="ppSkinJs2">(function(){var N=['훈련병','이병','상병','병장','특전사'];
@@ -1175,7 +1180,23 @@ var WO=q('winOv');if(WO)new MutationObserver(function(){if(!WO.classList.contain
   var L=rows.filter(function(r){return +r.l===lastWin.lv&&(!r.dv||r.dv===DV)&&(r.p==null||+r.p>=100)&&+r.t>0});var best=L.length?Math.min.apply(null,L.map(function(r){return +r.t})):Infinity;
   if(lastWin.ms<best){lastWin._w1=1;var ov=pp()?q('msGo'):WO;if(ov&&window.phWinShow)phWinShow(ov,'TIME',mmss(lastWin.ms,1))}}catch(e){}},pp()?400:200)}).observe(WO,{attributes:true,attributeFilter:['class']});
 var R=q('rankOv');if(R)new MutationObserver(function(){if(pp()&&window.phSeg)setTimeout(function(){phSeg(R)},30)}).observe(R,{attributes:true,attributeFilter:['class','hidden','style']});
-})();</script><script id="hapJs">/* 진동: 클리어 */(function(){var H=function(p){if(p&&window.phHaptic)phHaptic(p)};function w(n,p){var f=window[n];if(typeof f!=='function')return;window[n]=function(){var r=f.apply(this,arguments);try{H(typeof p==='function'?p.apply(this,arguments):p)}catch(e){}return r}}function o(obj,n,p){if(!obj||typeof obj[n]!=='function')return;var f=obj[n];obj[n]=function(){var r=f.apply(this,arguments);H(p);return r}}
+})();</script><script id="msBgm">/* 2026-10-31: 지뢰찾기 배경음 — 차분하게 생각하는 퍼즐용 오르골 곡 (F장조 · 느린 3박자 왈츠) */
+(function(){var BG={on:false,at:0,n:0,g:null};
+var MEL='A5 . C6|G5 . F5|E5 . G5|F5 . .|D5 F5 A5|C6 . A5|G5 . E5|F5 . .|A5 . C6|D6 . C6|A#5 . G5|A5 . .|G5 A5 A#5|A5 . F5|E5 . G5|F5 . .'.split('|').map(function(b){return b.split(' ')});
+var BAS=['F3','C3','C3','F3','D3','F3','C3','F3','F3','D3','G3','F3','C3','F3','C3','F3'];
+function NN(x){var m=x.match(/([A-G])(#?)(\d)/);return 440*Math.pow(2,({C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]]+(m[2]?1:0)+(+m[3]+1)*12-69)/12)}
+function vol(){try{if(window.phAudio)return phAudio.bgm()}catch(e){}return .7}
+function want(){try{return sndOn&&started&&!over&&!paused&&!document.hidden&&vol()>0}catch(e){return false}}
+function note(type,f,t,d,v,dst){var o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(dst);o.start(t);o.stop(t+d+.05)}
+function tick(){if(typeof ac==='undefined'||!ac)return;var w=want();
+ if(!BG.g){BG.g=ac.createGain();BG.g.gain.value=0;BG.g.connect(ac.destination)}
+ var now=ac.currentTime,tv=w?1.3*vol()/.7:0;if(Math.abs(tv-(BG.tv==null?-1:BG.tv))>.001){BG.tv=tv;BG.g.gain.cancelScheduledValues(now);BG.g.gain.setValueAtTime(BG.g.gain.value,now);BG.g.gain.linearRampToValueAtTime(tv,now+(w?.6:.3))}
+ if(!w){BG.on=false;return}if(!BG.on){BG.on=true;BG.at=now+.1}
+ var sp=60/92;while(BG.at<now+.4){var bar=Math.floor(BG.n/3)%16,k=BG.n%3,t=BG.at,n=MEL[bar][k];
+  if(n&&n!=='.'){var f=NN(n);note('sine',f,t,sp*1.8,.06,BG.g);note('triangle',f*2,t,.25,.012,BG.g);note('sine',f*4,t,.08,.008,BG.g)}
+  if(k===0)note('sine',NN(BAS[bar]),t,sp*2.6,.07,BG.g);else note('triangle',NN(BAS[bar])*(k===1?1.5:2),t,sp*.8,.02,BG.g);
+  BG.at+=sp;BG.n++}}
+setInterval(function(){try{tick()}catch(e){}},120)})();</script><script id="hapJs">/* 진동: 클리어 */(function(){var H=function(p){if(p&&window.phHaptic)phHaptic(p)};function w(n,p){var f=window[n];if(typeof f!=='function')return;window[n]=function(){var r=f.apply(this,arguments);try{H(typeof p==='function'?p.apply(this,arguments):p)}catch(e){}return r}}function o(obj,n,p){if(!obj||typeof obj[n]!=='function')return;var f=obj[n];obj[n]=function(){var r=f.apply(this,arguments);H(p);return r}}
 w('win',[30,40,30,40,80])})();</script>
 </body>
 </html>
