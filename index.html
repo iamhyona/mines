@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793417029";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793421309";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -1020,7 +1020,7 @@ $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 newGame();
 /* 설명은 자동으로 띄우지 않음: 위쪽 '도움말' 메뉴에서 보기 */
 </script>
-<script src="../games/ph.js?v=36"></script>
+<script src="../games/ph.js?v=38"></script>
 <script>/* 시작 화면 동작 */
 (function(){const st=document.getElementById('msStart');if(!st)return;
   const lg=st.querySelector('.phS-logo');const fillLogo=()=>{if(window.phLogo&&!lg.firstChild)lg.innerHTML=window.phLogo('MINE|SWEEPER')};fillLogo();setTimeout(fillLogo,300);
@@ -1168,6 +1168,12 @@ function hook(){var f=q('ppFace'),s=q('ppSet2');if(!f||!s){setTimeout(hook,300);
 hook();
 function seg(){var d=q('dvTabs');if(d)d.classList.toggle('phSeg',pp());var t=q('tabs');if(t)t.classList.toggle('lvsq',pp());if(pp()&&window.phSeg)phSeg(q('rankOv'))}
 seg();new MutationObserver(seg).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+/* 2026-10-31: 클리어 기록이 그 난도 랭킹 1위면 트로피 1위 화면 */
+function loadRows(){try{if(RANK_URL)fetch(RANK_URL+'?g=mines&_='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){window.__minesRows=j.top||[]}).catch(function(){})}catch(e){}}
+loadRows();var NG=window.newGame;if(typeof NG==='function')window.newGame=function(){loadRows();return NG.apply(this,arguments)};
+var WO=q('winOv');if(WO)new MutationObserver(function(){if(!WO.classList.contains('show')&&!pp())return;setTimeout(function(){try{if(!lastWin||lastWin._w1)return;var rows=window.__minesRows;if(!rows)return;
+  var L=rows.filter(function(r){return +r.l===lastWin.lv&&(!r.dv||r.dv===DV)&&(r.p==null||+r.p>=100)&&+r.t>0});var best=L.length?Math.min.apply(null,L.map(function(r){return +r.t})):Infinity;
+  if(lastWin.ms<best){lastWin._w1=1;var ov=pp()?q('msGo'):WO;if(ov&&window.phWinShow)phWinShow(ov,'TIME',mmss(lastWin.ms,1))}}catch(e){}},pp()?400:200)}).observe(WO,{attributes:true,attributeFilter:['class']});
 var R=q('rankOv');if(R)new MutationObserver(function(){if(pp()&&window.phSeg)setTimeout(function(){phSeg(R)},30)}).observe(R,{attributes:true,attributeFilter:['class','hidden','style']});
 })();</script><script id="hapJs">/* 진동: 클리어 */(function(){var H=function(p){if(p&&window.phHaptic)phHaptic(p)};function w(n,p){var f=window[n];if(typeof f!=='function')return;window[n]=function(){var r=f.apply(this,arguments);try{H(typeof p==='function'?p.apply(this,arguments):p)}catch(e){}return r}}function o(obj,n,p){if(!obj||typeof obj[n]!=='function')return;var f=obj[n];obj[n]=function(){var r=f.apply(this,arguments);H(p);return r}}
 w('win',[30,40,30,40,80])})();</script>
