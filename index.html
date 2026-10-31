@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793426313";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793428525";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -453,7 +453,7 @@ html.pp #rankOv #tabs.lvsq>button[data-t="0"]{--lc:#4aa3ff}html.pp #rankOv #tabs
 </style><style id="msUi3Css">#msStart .msHow{margin-top:18px!important}
 #msStart .phS-logo{height:auto!important;margin:0!important}#msStart #msShow{margin-top:26px!important;height:auto!important} /* 타이틀-그림 간격 통일 */
 html body #msStart .phS-logo svg{width:var(--lw,226px)!important;height:auto!important;max-width:86vw!important} /* 타이틀 크기 다른 게임과 같은 덩어리감 */
-#msShow i{display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;text-align:center!important;padding:0 0 2px!important;box-sizing:border-box}#msShow i svg{transform:translateY(1px)}#msShow i:not(.op)>*{visibility:visible!important}#msShow i svg{display:block;margin:0 auto} /* 시작 화면 타일: 숫자 가운데 · 깃발·폭탄도 항상 보이게 (2026-10-31) */
+#msShow i{display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;text-align:center!important;padding:0 0 2px!important;box-sizing:border-box}#msShow i svg{transform:translateY(1px)}#msShow i svg{display:block;margin:0 auto} /* 시작 화면 타일: 숫자 가운데 · 깃발·폭탄도 항상 보이게 (2026-10-31) */
 body:has(#msStart:not([hidden])) .lcd-label,body:has(#msLv:not([hidden])) .lcd-label{visibility:hidden!important} /* 시작 화면에서 게임 이름 두 줄로 겹치던 문제 */
 /* 2026-10-31: 랭킹 = 다른 게임과 동일(제목 17px · 알약 탭 · 목록 글꼴) / 시작 모드 토글 / 설정 창 */
 .phSet{position:fixed;inset:0;z-index:99997;display:flex;align-items:center;justify-content:center;background:rgba(8,9,12,.88);padding:16px;box-sizing:border-box}
@@ -519,7 +519,7 @@ html:not(.pp) #rankOv .phSegK{display:none!important}
 html.pp #rankOv .list div{padding:8px 6px!important;font:400 12px Galmuri11,sans-serif!important;color:#fff!important}
 html.pp #rankOv .list .rk{font:700 14px/1 Silkscreen,monospace!important}
 html.pp #rankOv .list .t{font:400 14px Galmuri11,sans-serif!important;letter-spacing:0!important;min-width:64px}
-</style></head>
+</style><style id="phLoadCss">.phLoad{display:inline-block;font:400 11px "Silkscreen",monospace!important;letter-spacing:.2em!important;color:#8a8fb0!important;white-space:nowrap}.phLoad::after{content:"";display:inline-block;width:2.2em;text-align:left;animation:phLoadD 1.2s steps(4) infinite}@keyframes phLoadD{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}</style></head>
 <body>
 <div id="msStart" role="dialog" aria-label="지뢰찾기 시작 화면">
   <div class="msHd">PARK HYONA'S MINESWEEPER</div>
@@ -983,7 +983,7 @@ function renderRank(){
   let rows=all.filter(r=>+r.l===rankTab).sort((a,b)=>(pct(b)-pct(a))||(a.t-b.t));
   const me=lastWin&&lastWin.saved&&lastWin.lv===rankTab?lastWin:null;
   $('list').innerHTML=rows.length?rows.map((r,k)=>`<div class="${me&&r.n===me.n&&+r.t===me.ms?'me':''}"><span class="rk">${k+1}</span><span>${esc(r.n)}</span><span class="pc${pct(r)>=100?' c':''}">${pct(r)}%</span><span class="t">${mmss(r.t,1)}</span></div>`).join('')
-    :`<div class="em">${rankLoading?'불러오는 중…':'아직 기록이 없어요'}</div>`;
+    :`<div class="em">${rankLoading?'<span class="phLoad">LOADING</span>':'아직 기록이 없어요'}</div>`;
 }
 const mmss=(ms,cs)=>{ms=Math.max(0,Math.round(+ms||0));const m=Math.floor(ms/60000),x=Math.floor(ms/1000)%60,f=ms%1000;return String(m).padStart(2,'0')+':'+String(x).padStart(2,'0')+(cs?'.'+String(f).padStart(3,'0'):'')}; /* MM:SS (기록은 MM:SS.mmm) */
 const pct=r=>r.p==null||r.p===''?100:Math.floor(+r.p);
@@ -1025,7 +1025,7 @@ $('tutAgain').onclick=()=>{hide('helpOv');tutOpen()};
 newGame();
 /* 설명은 자동으로 띄우지 않음: 위쪽 '도움말' 메뉴에서 보기 */
 </script>
-<script src="../games/ph.js?v=39"></script>
+<script src="../games/ph.js?v=40"></script>
 <script>/* 시작 화면 동작 */
 (function(){const st=document.getElementById('msStart');if(!st)return;
   const lg=st.querySelector('.phS-logo');const fillLogo=()=>{if(window.phLogo&&!lg.firstChild)lg.innerHTML=window.phLogo('MINE|SWEEPER')};fillLogo();setTimeout(fillLogo,300);
@@ -1050,7 +1050,7 @@ var FLAG_PP='<g transform="translate(-1.1 -.55)"><rect x="4" y="13.3" width="8" 
 var M0,F0;function sym(id){return document.getElementById(id)}
 function apply(pp){document.documentElement.classList.toggle('pp',pp);var m=sym('i-mine'),f=sym('i-flag');if(m&&f){if(M0==null){M0=m.innerHTML;F0=f.innerHTML}m.innerHTML=M0; /* 지뢰는 두 모드 모두 원래 지뢰 */f.innerHTML=pp?FLAG_PP:F0}
  document.querySelectorAll('#msMode button').forEach(function(b){b.classList.toggle('on',(b.dataset.s==='pp')===pp)})}
-function init(){var pp=true;try{pp=localStorage.getItem(K)!=='cl'}catch(e){}
+function init(){var pp=true; /* 2026-10-31 항상 PANGPANG로 시작 */
  var bt=document.querySelector('#msStart .msBtns');if(bt&&!sym('msMode')){var d=document.createElement('div');d.id='msMode';d.className='ppTg phSeg';d.innerHTML='<button type="button" data-s="pp">PANGPANG</button><button type="button" data-s="cl">CLASSIC</button>';bt.insertBefore(d,bt.firstChild);
   d.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var v=b.dataset.s==='pp';try{localStorage.setItem(K,v?'pp':'cl')}catch(e){}apply(v)})}
  apply(pp);setTimeout(function(){window.phSeg&&phSeg()},300)}
