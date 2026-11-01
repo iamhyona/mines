@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793572641";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793573539";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -1082,7 +1082,7 @@ newGame();
 </script>
 <script id="ppSkinJs">/* 팡팡이 모드 시안: 시작 화면에서 CLASSIC | PANGPANG 선택 (이 기기에 저장) */
 (function(){var K='mines-skin';var MINE_PP='<ellipse cx="8" cy="9.2" rx="6.3" ry="5.7" fill="#ff4d6d"/><ellipse cx="8" cy="6.6" rx="4" ry="1.8" fill="#ffb3c1" opacity=".55"/><circle cx="5.2" cy="6.4" r="1" fill="#fff"/><path d="M5 8.2l2 .7M11 8.2l-2 .7" stroke="#3a0d1c" stroke-width=".9" stroke-linecap="round"/><circle cx="6.3" cy="10" r=".95" fill="#3a0d1c"/><circle cx="9.7" cy="10" r=".95" fill="#3a0d1c"/><path d="M8 3.6Q8.6 1.8 10.4 1.9" stroke="#ffd43b" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="10.7" cy="1.9" r="1" fill="#ffd43b"/>';
-var FLAG_PP='<rect x="2.9" y="12.9" width="8.6" height="2.3" rx="1.15" fill="#fff" stroke="#2a1712" stroke-width=".4"/><rect x="4.6" y="1.1" width="3" height="12.4" rx="1.5" fill="#fff" stroke="#2a1712" stroke-width=".4"/><path d="M7.6 1.1L15.5 5.3L7.6 9.5Z" fill="#ff3d5c" stroke="#2a1712" stroke-width=".45" stroke-linejoin="round"/><path d="M7.85 5.3L14.7 5.3L7.85 8.95Z" fill="#c8213e"/>'; /* 2026-11-02: 얼굴 없는 삼각 깃발 · 두 톤 · 테두리 · 굵은 깃대 */
+var FLAG_PP='<rect x="2.6" y="13" width="7.6" height="2.1" rx="1.05" fill="#fff" stroke="#2a1712" stroke-width=".4"/><rect x="5.3" y="1.1" width="2.2" height="12.4" rx="1.1" fill="#fff" stroke="#2a1712" stroke-width=".4"/><path d="M7.4 1.1L15.4 5.3L7.4 9.5Z" fill="#ff3d5c" stroke="#2a1712" stroke-width=".45" stroke-linejoin="round"/><path d="M7.65 5.3L14.6 5.3L7.65 8.95Z" fill="#c8213e"/>'; /* 2026-11-02: 얼굴 없는 삼각 깃발 · 두 톤 · 테두리 · 깃대 굵기 중간(2.2) */
 var M0,F0;function sym(id){return document.getElementById(id)}
 function apply(pp){document.documentElement.classList.toggle('pp',pp);setFace(window.pangFaceState||'smile');var m=sym('i-mine'),f=sym('i-flag');if(m&&f){if(M0==null){M0=m.innerHTML;F0=f.innerHTML}m.innerHTML=M0; /* 지뢰는 두 모드 모두 원래 지뢰 */f.innerHTML=pp?FLAG_PP:F0}
  document.querySelectorAll('#msMode button').forEach(function(b){b.classList.toggle('on',(b.dataset.s==='pp')===pp)})}
