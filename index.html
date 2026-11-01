@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793557254";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793572641";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -1216,31 +1216,33 @@ var WO=q('winOv');if(WO)new MutationObserver(function(){if(!WO.classList.contain
   var L=rows.filter(function(r){return +r.l===lastWin.lv&&(!r.dv||r.dv===DV)&&(r.p==null||+r.p>=100)&&+r.t>0});var best=L.length?Math.min.apply(null,L.map(function(r){return +r.t})):Infinity;
   if(lastWin.ms<best){lastWin._w1=1;var ov=pp()?q('msGo'):WO;if(ov&&window.phWinShow)phWinShow(ov,'TIME',mmss(lastWin.ms,1))}}catch(e){}},pp()?400:200)}).observe(WO,{attributes:true,attributeFilter:['class']});
 var R=q('rankOv');if(R)new MutationObserver(function(){if(pp()&&window.phSeg)setTimeout(function(){phSeg(R)},30)}).observe(R,{attributes:true,attributeFilter:['class','hidden','style']});
-})();</script><script id="msBgm">/* 2026-11-02: 지뢰찾기 배경음 — 잔잔하지만 자장가 같지 않게: 4박 로파이 퍼즐 그루브 (A단조 · 96bpm · 일렉 피아노 코드 + 8분 아르페지오 + 베이스 + 아주 작은 하이햇) */
-(function(){var BG={on:false,at:0,n:0,g:null,nz:null};
-var CH=[['A2','A3','C4','E4','G4'],['F2','F3','A3','C4','E4'],['C3','C4','E4','G4','B4'],['G2','G3','B3','D4','E4'],['D3','D4','F4','A4','C5'],['F2','F3','A3','C4','E4'],['A2','A3','C4','E4','G4'],['E2','E3','G#3','B3','D4']];
-var ARP=[1,2,3,4,3,2,4,3];
-var MEL={2:'E5',3:'D5',6:'C5',10:'G4',11:'A4',14:'E5',18:'C5',19:'D5',22:'E5',26:'B4',27:'C5',30:'A4',34:'E5',35:'G5',38:'E5',42:'D5',43:'C5',46:'D5',50:'C5',51:'E5',54:'A4',58:'G#4',59:'B4',62:'E5'};
-function NN(x){var m=x.match(/([A-G])(#?)(\d)/);return 440*Math.pow(2,({C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]]+(m[2]?1:0)+(+m[3]+1)*12-69)/12)}
+})();</script><script id="msBgm">/* 2026-11-02: 지뢰찾기 배경음 v4 '산책' — 팡팡이 시리즈 악기(마림바·뮤직박스·통통 베이스) · C장조 100bpm · 고음 없음 · 난도 고른 뒤 퍼즐 화면에서만 */
+(function(){var mk=(function(ac,want,vol){/* 팡팡이 시리즈와 같은 악기(마림바·뮤직박스·통통 베이스) · 산책 · 따라 부르기 쉬운 반복 후렴 · C장조 100bpm · 멜로디 D5 이하 · 맑지만 쨍하지 않게 3.6kHz 위 줄임 */
+var SONG={bpm:100,tr:[
+ {i:"mal",v:.42,s:"E4 G4 . A4 G4 . E4 .|F4 . A4 C5 - . A4 .|E4 G4 . A4 G4 . E4 .|F4 . E4 D4 - . . .|D4 F4 . A4 C5 . A4 .|B4 . D5 . B4 G4 . .|G4 E4 . G4 A4 . G4 E4|D4 - . E4 G4 - . ."},
+ {i:"pls",v:.5,s:"C3 . . C3 G2 . C3 .|F2 . . F2 C3 . F2 .|C3 . . C3 G2 . C3 .|F2 . . F2 C3 . F2 .|D3 . . D3 A2 . D3 .|G2 . . G2 D3 . G2 .|E3 . . E3 B2 . E3 .|G2 . . G2 D3 . . ."},
+ {i:"box",v:.05,s:". . G4 . . . E4 .|. . A4 . . . C4 .|. . G4 . . . E4 .|. . A4 . . . F4 .|. . A4 . . . F4 .|. . B4 . . . D4 .|. . G4 . . . B3 .|. . B4 . . . D4 ."}]};
+var NN={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+function parse(song){var ev=[],total=0;song.tr.forEach(function(tr){var toks=tr.s.split("|").reduce(function(a,b){return a.concat(b.trim().split(/\s+/))},[]);total=toks.length;var last=null;
+ toks.forEach(function(k,i){if(k==="-"){if(last)last.len++;return}last=null;if(k===".")return;var m=k.match(/^([A-G])(#?)(\d)$/);var e={st:i,i:tr.i,v:tr.v,m:12*(+m[3]+1)+NN[m[1]]+(m[2]?1:0),len:1};ev.push(e);last=e})});
+ ev.sort(function(a,b){return a.st-b.st});return {ev:ev,total:total,step:60/song.bpm/2}}
+var P=parse(SONG),G=null,at=0,idx=0,loop=0,on=false,tv=-1;
+function voice(dst,e,t,step){var f=440*Math.pow(2,(e.m-69)/12),d=e.len*step,v=e.v;
+ function env(g,a,peak,dec){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0004,t+a+dec)}
+ function osc(type,fr,peak,a,dec){var o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=fr;env(g,a,peak,dec);o.connect(g).connect(dst);o.start(t);o.stop(t+a+dec+.05)}
+ if(e.i==="mal"){osc("sine",f,v,.004,.4+Math.min(d,.35));osc("sine",f*4,v*.05,.003,.05)}
+ else if(e.i==="box"){osc("sine",f,v,.003,1.1);osc("sine",f*3,v*.1,.002,.22);osc("sine",f*2,v*.08,.002,.5)}
+ else if(e.i==="pls"){osc("triangle",f,v,.006,.2+Math.min(d,.3)*.6);osc("sine",f*2,v*.2,.004,.08)}}
+return function(){if(!ac)return;var w=want();
+ if(!G){G=ac.createGain();G.gain.value=0;var lp=ac.createBiquadFilter();lp.type="lowpass";lp.frequency.value=3600;G.connect(lp).connect(ac.destination)}
+ var now=ac.currentTime,t2=w?.16*vol()/.7:0;if(Math.abs(t2-tv)>.001){tv=t2;G.gain.cancelScheduledValues(now);G.gain.setValueAtTime(G.gain.value,now);G.gain.linearRampToValueAtTime(t2,now+(w?1:.35))}
+ if(!w){on=false;return}if(!on){on=true;at=now+.12;idx=0}
+ var L=P.total*P.step;while(true){if(idx>=P.ev.length){idx=0;at+=L}var e=P.ev[idx],t=at+e.st*P.step;if(t>now+.6)break;if(t>=now-.05)voice(G,e,t,P.step);idx++}}});
 function vol(){try{if(window.phAudio)return phAudio.bgm()}catch(e){}return .7}
-function want(){try{return sndOn&&!over&&!paused&&!document.hidden&&vol()>0}catch(e){return false}} /* 시작 화면부터 (첫 터치 때 소리 켜짐) */
-function note(type,f,t,d,v,dst,a){var o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+(a||.006));g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(dst);o.start(t);o.stop(t+d+.05)}
-function hat(t,v){if(!BG.nz){var b=ac.createBuffer(1,ac.sampleRate*.05,ac.sampleRate),d=b.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;BG.nz=b}
- var s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=BG.nz;f.type='highpass';f.frequency.value=7000;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.04);s.connect(f).connect(g).connect(BG.g);s.start(t);s.stop(t+.05)}
-function tick(){if(typeof ac==='undefined'||!ac)return;var w=want();
- if(!BG.g){BG.g=ac.createGain();BG.g.gain.value=0;var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=5200;BG.g.connect(lp);lp.connect(ac.destination)}
- var now=ac.currentTime,tv=w?1.25*vol()/.7:0;if(Math.abs(tv-(BG.tv==null?-1:BG.tv))>.001){BG.tv=tv;BG.g.gain.cancelScheduledValues(now);BG.g.gain.setValueAtTime(BG.g.gain.value,now);BG.g.gain.linearRampToValueAtTime(tv,now+(w?.8:.3))}
- if(!w){BG.on=false;return}if(!BG.on){BG.on=true;BG.at=now+.1}
- var e=60/96/2; /* 8분음표 */
- while(BG.at<now+.4){var n=BG.n,bar=Math.floor(n/8)%8,k=n%8,t=BG.at+(k%2?e*.08:0),c=CH[bar]; /* 살짝 스윙 */
-  if(k===0||k===3){for(var i=2;i<5;i++)note('triangle',NN(c[i]),t,k===0?e*5:e*3,.022,BG.g,.012);note('sine',NN(c[2])*2,t,.18,.006,BG.g)} /* 일렉 피아노 느낌 코드 */
-  note('sine',NN(c[ARP[k]])*2,t,e*1.4,k%2?.016:.024,BG.g); /* 8분 아르페지오 */
-  if(k===0||k===4||k===7)note('sine',NN(c[0]),t,k===7?e*.9:e*2.6,k===7?.05:.075,BG.g); if(k===4)note('triangle',NN(c[1]),t,e*.9,.02,BG.g); /* 베이스 */
-  if(k%2)hat(t,.012); if(k===4)hat(t,.02);
-  var mi=n%64;if(MEL[mi]){var f=NN(MEL[mi]);note('triangle',f,t,e*3,.032,BG.g,.01);note('sine',f*2,t,e*1.5,.008,BG.g)} /* 멜로디 */
-  BG.at+=e;BG.n++}}
-setInterval(function(){try{tick()}catch(e){}},120);
-['keydown'].forEach(function(t){addEventListener(t,function(){try{if(sndOn&&(!ac||ac.state!=='running'))AC()}catch(e){}},true)}); /* PC: 키 눌러도 소리 켜짐 */
+function inGame(){var st=document.getElementById('msStart'),lv=document.getElementById('msLv');return !!(st&&st.hidden)&&!(lv&&!lv.hidden)}
+function want(){try{return sndOn&&inGame()&&!over&&!paused&&!document.hidden&&vol()>0}catch(e){return false}}
+var tick=null;setInterval(function(){try{if(typeof ac==='undefined'||!ac)return;if(!tick)tick=mk(ac,want,vol);tick()}catch(e){}},120);
+['keydown'].forEach(function(t){addEventListener(t,function(){try{if(sndOn&&(!ac||ac.state!=='running'))AC()}catch(e){}},true)});
 })();</script><script id="hapJs">/* 진동: 클리어 · 지뢰 (게임오버) */(function(){var H=function(p){if(p&&window.phHaptic)phHaptic(p)};function w(n,p){var f=window[n];if(typeof f!=='function')return;window[n]=function(){var r=f.apply(this,arguments);try{H(typeof p==='function'?p.apply(this,arguments):p)}catch(e){}return r}}function o(obj,n,p){if(!obj||typeof obj[n]!=='function')return;var f=obj[n];obj[n]=function(){var r=f.apply(this,arguments);H(p);return r}}
 w('win',[30,40,30,40,80]);w('lose',[60,40,120])})();</script>
 </body>
