@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793514768";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
+<script>/* 옛 버전 캐시 자동 갱신 */(function(){var V="1793536794";try{fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var m=t.match(/var V="(\d+)"/);if(m&&m[1]!==V&&location.search.indexOf("v="+m[1])<0){location.replace(location.pathname+"?v="+m[1])}}).catch(function(){})}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>지뢰찾기</title>
 <meta name="description" content="이 게임은 박현아가 제공하는 비상업적 게임입니다.">
@@ -1196,8 +1196,8 @@ function tick(){if(typeof ac==='undefined'||!ac)return;var w=want();
   if(n&&n!=='.'){var f=NN(n);note('sine',f,t,sp*1.8,.06,BG.g);note('triangle',f*2,t,.25,.012,BG.g);note('sine',f*4,t,.08,.008,BG.g)}
   if(k===0)note('sine',NN(BAS[bar]),t,sp*2.6,.07,BG.g);else note('triangle',NN(BAS[bar])*(k===1?1.5:2),t,sp*.8,.02,BG.g);
   BG.at+=sp;BG.n++}}
-setInterval(function(){try{tick()}catch(e){}},120)})();</script><script id="hapJs">/* 진동: 클리어 */(function(){var H=function(p){if(p&&window.phHaptic)phHaptic(p)};function w(n,p){var f=window[n];if(typeof f!=='function')return;window[n]=function(){var r=f.apply(this,arguments);try{H(typeof p==='function'?p.apply(this,arguments):p)}catch(e){}return r}}function o(obj,n,p){if(!obj||typeof obj[n]!=='function')return;var f=obj[n];obj[n]=function(){var r=f.apply(this,arguments);H(p);return r}}
-w('win',[30,40,30,40,80])})();</script>
+setInterval(function(){try{tick()}catch(e){}},120)})();</script><script id="hapJs">/* 진동: 클리어 · 지뢰 (게임오버) */(function(){var H=function(p){if(p&&window.phHaptic)phHaptic(p)};function w(n,p){var f=window[n];if(typeof f!=='function')return;window[n]=function(){var r=f.apply(this,arguments);try{H(typeof p==='function'?p.apply(this,arguments):p)}catch(e){}return r}}function o(obj,n,p){if(!obj||typeof obj[n]!=='function')return;var f=obj[n];obj[n]=function(){var r=f.apply(this,arguments);H(p);return r}}
+w('win',[30,40,30,40,80]);w('lose',[60,40,120])})();</script>
 </body>
 </html>
 
