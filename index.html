@@ -53,7 +53,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .drop button{display:flex;justify-content:space-between;width:100%;padding:9px 10px;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink)}
 .drop button:hover{background:rgba(255,255,255,.07)}
 .drop button small{color:var(--sub);font-weight:600}
-.drop button.cur::before{content:'✓';color:#7c9cff;margin-right:6px}
+.drop button.cur::before{content:'';display:inline-block;width:10px;height:8px;background:#7c9cff;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 6' shape-rendering='crispEdges'%3E%3Cpath d='M6 0h2v1h-2zM5 1h3v1h-3zM0 2h2v1h-2zM4 2h3v1h-3zM0 3h6v1h-6zM1 4h4v1h-4zM2 5h2v1h-2z'/%3E%3C/svg%3E") no-repeat center/contain;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 6' shape-rendering='crispEdges'%3E%3Cpath d='M6 0h2v1h-2zM5 1h3v1h-3zM0 2h2v1h-2zM4 2h3v1h-3zM0 3h6v1h-6zM1 4h4v1h-4zM2 5h2v1h-2z'/%3E%3C/svg%3E") no-repeat center/contain;margin-right:6px}
 .drop hr{border:0;border-top:1px solid rgba(255,255,255,.08);margin:4px 6px}
 .hd{display:flex;justify-content:space-between;align-items:center;background:var(--well);border-radius:10px;padding:8px;
   box-shadow:inset 0 3px 6px rgba(0,0,0,.6),inset 0 -1px 0 rgba(255,255,255,.05);margin-bottom:8px}
@@ -84,7 +84,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .wellg.paused .pz{display:flex}
 .fb.on{color:#ff8a95;background:#3a2a30;border-color:var(--tileB) #4a4e58 #4a4e58 var(--tileB);box-shadow:inset 0 0 0 1.5px rgba(255,77,94,.6)}
 .credit{margin-top:12px;font-size:11px;color:rgba(255,255,255,.35);text-align:center;line-height:1.5}
-.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-20px);opacity:0;background:#2e3038;color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700;transition:.25s;pointer-events:none;z-index:60;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-20px);opacity:0;background:#2e3038;color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700;transition:.25s;pointer-events:none;z-index:60;box-shadow:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast{white-space:nowrap}
 /* modal */
@@ -175,7 +175,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 @keyframes wv{0%{transform:none}30%{transform:scale(1.12);background:#ffd43b;box-shadow:0 0 12px rgba(255,212,59,.8);color:#1d1d1f;text-shadow:none}100%{transform:none}}
 .g i.wf svg{animation:fl .45s cubic-bezier(.34,1.8,.5,1) var(--d,0ms) both}
 .win.glow{animation:glow 1.4s ease-out}
-@keyframes glow{0%{box-shadow:0 0 0 0 rgba(255,212,59,.9),0 18px 40px rgba(0,0,0,.45)}40%{box-shadow:0 0 0 6px rgba(255,212,59,.55),0 0 50px rgba(255,212,59,.5)}100%{box-shadow:0 0 0 0 rgba(255,212,59,0),0 18px 40px rgba(0,0,0,.45)}}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(255,212,59,.9)}40%{box-shadow:0 0 0 6px rgba(255,212,59,.55),0 0 50px rgba(255,212,59,.5)}100%{box-shadow:0 0 0 0 rgba(255,212,59,0)}}
 
 </style>
 <script>/* 카톡 등 인앱 브라우저: 실제 보이는 높이로 화면 맞춤 */(function(){var d=document.documentElement;function f(){d.style.setProperty('--app-h',window.innerHeight+'px')}f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,300)});addEventListener('pageshow',f);setTimeout(f,250);setTimeout(f,1000)})();</script>
@@ -294,11 +294,11 @@ html.pp .g i.u.press{background:#1b1f3d!important;box-shadow:inset 0 2px 3px rgb
 html.pp .g i.u.press::after{display:none}
 </style><style id="noCredit">/* 게임 화면 하단 문구 빼기 (다른 게임과 같게, 두 모드 모두) */body>.credit{display:none!important}</style><style id="noFoot">/* 팡팡이 모드: 하단 버튼 없앰 (깃발=길게 누르기·오른쪽 클릭, 랭킹=설정 메뉴) */html.pp #ft{display:none!important}html.pp .wellg{max-height:calc(var(--app-h,100dvh) - 210px)!important}</style><style id="ppLvTile">/* 누르는 칸 색도 난도별 */
 html.pp{--t1:#6a78e0;--t2:#4a57c2;--t3:#3a44a0}
-html.pp[data-lv="0"]{--t1:#5fa2f2;--t2:#3d80dc;--t3:#2a62b8} /* 2026-11-02: 보라 기 빼고 파랑답게 */
-html.pp[data-lv="1"]{--t1:#68c58e;--t2:#419c6a;--t3:#317a52}
-html.pp[data-lv="2"]{--t1:#e0c46c;--t2:#c29f38;--t3:#9f7f25}
-html.pp[data-lv="3"]{--t1:#e8797d;--t2:#cc5056;--t3:#a83b42}
-html.pp[data-lv="4"]{--t1:#a286dd;--t2:#7e60c2;--t3:#6145a0}
+html.pp[data-lv="0"]{--t1:#6a78e0;--t2:#4a57c2;--t3:#3a44a0} /* 2026-11-19: 게임판은 모든 난도 남색 (UI 규칙) */
+html.pp[data-lv="1"]{--t1:#6a78e0;--t2:#4a57c2;--t3:#3a44a0}
+html.pp[data-lv="2"]{--t1:#6a78e0;--t2:#4a57c2;--t3:#3a44a0}
+html.pp[data-lv="3"]{--t1:#6a78e0;--t2:#4a57c2;--t3:#3a44a0}
+html.pp[data-lv="4"]{--t1:#6a78e0;--t2:#4a57c2;--t3:#3a44a0}
 html.pp .g i.u.fg{background:linear-gradient(160deg,#3b4170 0%,#2a2f57 45%,#1f2344 100%)!important}html.pp .g i.u.fg::after{background:rgba(255,255,255,.18)}
 
 html.pp .g i.u{background:linear-gradient(160deg,var(--t1) 0%,var(--t2) 45%,var(--t3) 100%)!important}
@@ -618,7 +618,7 @@ html.pp #tutOv #tutNext{--b:var(--fc,#10b870);--t:#f2f2f7}
 </div></div></div>
 
 <div class="ov" id="rankOv"><div class="md"><div class="tb"><span class="ttl"><svg width="16" height="16" viewBox="0 0 16 16"><use href="#i-trophy"/></svg>최단 시간 랭킹</span></div><div class="bd">
-  <div class="tabs dvt" id="dvTabs"><button data-d="m">모바일</button><button data-d="p">PC</button></div><div class="tabs" id="tabs"><button data-t="0">훈련병</button><button data-t="1">이병</button><button data-t="2">상병</button><button data-t="3">병장</button><button data-t="4">특전사</button></div>
+  <div class="tabs" id="tabs"><button data-t="0">훈련병</button><button data-t="1">이병</button><button data-t="2">상병</button><button data-t="3">병장</button><button data-t="4">특전사</button></div>
   <div class="list" id="list"></div>
   <button class="close" data-close>✕</button>
 </div></div></div>
@@ -1005,7 +1005,7 @@ let rankTab=0, remote=null, rankDv=DV;
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{rankTab=+b.dataset.t;renderRank()});
 document.querySelectorAll('#dvTabs button').forEach(b=>b.onclick=()=>{rankDv=b.dataset.d;pickTab();renderRank()});
 let rankLoading=false;
-function allRanks(){const seen=new Set(),out=[];for(const r of [...(remote||[]),...localRanks()]){const k=r.n+'|'+r.t+'|'+r.l+'|'+pct(r);if(!seen.has(k)){seen.add(k);out.push(r)}}return out.filter(r=>!r.dv||r.dv===rankDv)} /* 기기 구분 전 기록은 양쪽에 표시 */
+function allRanks(){const seen=new Set(),out=[];for(const r of [...(remote||[]),...localRanks()]){const k=r.n+'|'+r.t+'|'+r.l+'|'+pct(r);if(!seen.has(k)){seen.add(k);out.push(r)}}return out} /* 2026-11-19: 모바일/PC 구분 없이 한 랭킹 (기록은 그대로) */
 function pickTab(){const a=allRanks();if(!a.some(r=>+r.l===rankTab)){const f=LV.findIndex((_,i)=>a.some(r=>+r.l===i));if(f>=0)rankTab=f}}
 async function openRank(t){
   rankTab=t; rankDv=DV; show('rankOv'); rankLoading=!!RANK_URL; pickTab(); renderRank();
@@ -1213,7 +1213,7 @@ seg();new MutationObserver(seg).observe(document.documentElement,{attributes:tru
 function loadRows(){try{if(RANK_URL)fetch(RANK_URL+'?g=mines&_='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){window.__minesRows=j.top||[]}).catch(function(){})}catch(e){}}
 loadRows();var NG=window.newGame;if(typeof NG==='function')window.newGame=function(){loadRows();return NG.apply(this,arguments)};
 var WO=q('winOv');if(WO)new MutationObserver(function(){if(!WO.classList.contains('show')&&!pp())return;setTimeout(function(){try{if(!lastWin||lastWin._w1)return;var rows=window.__minesRows;if(!rows)return;
-  var L=rows.filter(function(r){return +r.l===lastWin.lv&&(!r.dv||r.dv===DV)&&(r.p==null||+r.p>=100)&&+r.t>0});var best=L.length?Math.min.apply(null,L.map(function(r){return +r.t})):Infinity;
+  var L=rows.filter(function(r){return +r.l===lastWin.lv&&(r.p==null||+r.p>=100)&&+r.t>0});var best=L.length?Math.min.apply(null,L.map(function(r){return +r.t})):Infinity;
   if(lastWin.ms<best){lastWin._w1=1;var ov=pp()?q('msGo'):WO;if(ov&&window.phWinShow)phWinShow(ov,'TIME',mmss(lastWin.ms,1))}}catch(e){}},pp()?400:200)}).observe(WO,{attributes:true,attributeFilter:['class']});
 var R=q('rankOv');if(R)new MutationObserver(function(){if(pp()&&window.phSeg)setTimeout(function(){phSeg(R)},30)}).observe(R,{attributes:true,attributeFilter:['class','hidden','style']});
 })();</script><script id="msBgm">/* 2026-11-02: 지뢰찾기 배경음 v4 '산책' — 팡팡이 시리즈 악기(마림바·뮤직박스·통통 베이스) · C장조 100bpm · 고음 없음 · 난도 고른 뒤 퍼즐 화면에서만 */
